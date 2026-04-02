@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEM Dashboard 2026</title>
+
+<!-- ════════════════════════════════════════════════
+     KONFIGURATION – hier deine Werte eintragen
+     ════════════════════════════════════════════════ -->
+<script>
+const CONFIG = {
+  clientId:    'f42793b9-9bae-4871-bbfd-72bed970d4ec',       // aus Azure Portal
+  tenantId:    '30a45eeb-3ae3-427c-92a3-182becc9f7cc',           // aus Azure Portal
+  excelFile:   'IEM-Daten.xlsx',            // Dateiname auf OneDrive (Wurzelverzeichnis)
+  sheetName:   'Daten',                     // Tabellenblatt-Name in der Excel-Datei
+};
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+<script>
+// MSAL – Microsoft Authentication Library (laden wir direkt)
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:#f5f4f0; --surface:#fff; --surface2:#f0efe9; --border:#e2e0d8;
+  --border2:#cccab8; --text:#1a1916; --text2:#6b6860; --text3:#9e9c96;
+  --accent:#2c5f2e; --accent-light:#e8f0e8; --accent2:#1e3a8a;
+  --danger:#991b1b; --danger-light:#fee2e2;
+  --radius:10px; --radius-sm:6px; --shadow:0 1px 3px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+
+.app-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:16px;height:56px;position:sticky;top:0;z-index:100}
+.app-title{font-size:15px;font-weight:600;letter-spacing:-0.3px}
+.app-title span{font-weight:300;color:var(--text2)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav-btn{padding:6px 14px;border:none;background:none;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s}
+.nav-btn:hover{background:var(--surface2);color:var(--text)}
+.nav-btn.active{background:var(--text);color:white}
+
+.status-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);font-family:'DM Mono',monospace}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.status-dot.connected{background:#15803d}
+.status-dot.syncing{background:#d97706;animation:pulse 1s infinite}
+.status-dot.error{background:var(--danger)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.pane{display:none}.pane.active{display:block}
+
+/* LOGIN */
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px 48px;text-align:center;max-width:400px;box-shadow:var(--shadow)}
+.login-card h2{font-size:20px;font-weight:600;margin-bottom:8px}
+.login-card p{color:var(--text2);font-size:13px;line-height:1.6;margin-bottom:24px}
+.login-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:#0078d4;color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.login-btn:hover{opacity:.9}
+.ms-logo{width:18px;height:18px}
+
+/* METRIKEN */
+.metrics-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.metric-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:6px}
+.metric-value{font-size:28px;font-weight:600;letter-spacing:-1px;font-family:'DM Mono',monospace}
+
+/* MONATSPILLEN */
+.month-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.mpill{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);transition:all .15s}
+.mpill:hover{border-color:var(--border2);color:var(--text)}
+.mpill.active{background:var(--text);color:white;border-color:var(--text)}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:680px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.chart-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px}
+.bar-label{min-width:100px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
+.bar-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .4s ease}
+.bar-fill.blue{background:var(--accent2)}
+.bar-num{min-width:28px;text-align:right;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+
+/* FILTER */
+.filter-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;box-shadow:var(--shadow)}
+.filter-field{display:flex;flex-direction:column;gap:4px}
+.filter-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
+input[type=text],input[type=date],select{font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);outline:none;transition:border .15s}
+input[type=text]:focus,input[type=date]:focus,select:focus{border-color:var(--border2);background:white}
+input[type=text]{min-width:160px}
+select{min-width:130px}
+
+.result-count{font-size:12px;color:var(--text3);margin-bottom:8px;font-family:'DM Mono',monospace}
+.tbl-wrapper{overflow-x:auto;border-radius:var(--radius)}
+.data-table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);font-size:13px}
+.data-table th{background:var(--surface2);padding:10px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:1px solid var(--border)}
+.data-table td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--surface2)}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.b-ve{background:#ede9fe;color:#4c1d95}.b-fa{background:#dbeafe;color:#1e3a8a}
+.b-ca{background:#dcfce7;color:#14532d}.b-he{background:#fef3c7;color:#78350f}
+.b-ie{background:#d1fae5;color:#064e3b}.b-ue{background:#fce7f3;color:#831843}
+.b-rh{background:#e0e7ff;color:#1e1b4b}.b-64{background:#fff7ed;color:#7c2d12}
+.b-other{background:var(--surface2);color:var(--text2)}
+.cat-tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:500;background:var(--surface2);color:var(--text2);margin-right:2px;border:1px solid var(--border)}
+
+.del-btn{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text3);cursor:pointer;padding:2px 8px;font-size:12px;transition:all .15s}
+.del-btn:hover{background:var(--danger-light);color:var(--danger);border-color:#fca5a5}
+
+/* EINGABE */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:680px;box-shadow:var(--shadow)}
+.form-row{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.form-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:160px}
+.form-label{font-size:12px;font-weight:500;color:var(--text2)}
+.form-input{width:100%;padding:9px 12px;min-width:unset}
+.checks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:20px}
+.check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;font-size:13px;color:var(--text2)}
+.check-item:hover{border-color:var(--border2);color:var(--text);background:var(--surface2)}
+.check-item input{display:none}
+.check-item.checked{background:var(--accent-light);border-color:#86efac;color:var(--accent);font-weight:500}
+.submit-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed}
+.success-msg{display:inline-block;margin-left:12px;font-size:12px;color:#15803d;font-weight:500;opacity:0;transition:opacity .3s}
+.success-msg.show{opacity:1}
+.export-btn{padding:6px 14px;border:1px solid var(--border);background:var(--surface);border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:var(--text2);transition:all .15s}
+.export-btn:hover{border-color:var(--border2);color:var(--text)}
+.empty-state{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:white;padding:12px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.error{background:var(--danger)}
+
+/* SPINNER */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<header class="app-header">
+  <div class="app-title">IEM <span>Dashboard 2026</span></div>
+  <div class="status-bar">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Nicht verbunden</span>
+  </div>
+  <nav class="nav" id="main-nav" style="display:none">
+    <button class="nav-btn active" onclick="showPane('statistik',this)">Statistik</button>
+    <button class="nav-btn" onclick="showPane('suche',this)">Suche</button>
+    <button class="nav-btn" onclick="showPane('eingabe',this)">+ Eintrag</button>
+    <button class="nav-btn" onclick="logout()" style="margin-left:8px;color:var(--text3)">Abmelden</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <h2>IEM Dashboard</h2>
+      <p>Melde dich mit deinem Microsoft-Konto an. Deine Daten werden direkt auf OneDrive gespeichert und sind auf jedem Gerät verfügbar.</p>
+      <button class="login-btn" onclick="login()">
+        <svg class="ms-logo" viewBox="0 0 21 21" fill="none">
+          <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+          <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+          <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+          <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+        </svg>
+        Mit Microsoft anmelden
+      </button>
+    </div>
+  </div>
+
+  <!-- HAUPTINHALT -->
+  <div id="main-content" style="display:none">
+
+    <!-- STATISTIK -->
+    <div id="pane-statistik" class="pane active">
+      <div class="month-pills" id="month-pills"></div>
+      <div class="metrics-row" id="metrics-row"></div>
+      <div class="charts-grid">
+        <div class="chart-card"><div class="chart-title">Top Produkte</div><div id="chart-products"></div></div>
+        <div class="chart-card"><div class="chart-title">Lieferanten</div><div id="chart-suppliers"></div></div>
+      </div>
+    </div>
+
+    <!-- SUCHE -->
+    <div id="pane-suche" class="pane">
+      <div class="filter-bar">
+        <div class="filter-field"><div class="filter-label">Name</div><input type="text" id="f-name" placeholder="Name suchen..." oninput="renderTable()"></div>
+        <div class="filter-field"><div class="filter-label">Produkt</div><input type="text" id="f-prod" placeholder="Produkt..." oninput="renderTable()"></div>
+        <div class="filter-field"><div class="filter-label">Monat</div>
+          <select id="f-monat" onchange="renderTable()">
+            <option value="">Alle</option>
+            <option value="1">Januar</option><option value="2">Februar</option><option value="3">März</option>
+            <option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option>
+            <option value="7">Juli</option><option value="8">August</option><option value="9">September</option>
+            <option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option>
+          </select>
+        </div>
+        <div class="filter-field"><div class="filter-label">Kategorie</div>
+          <select id="f-kat" onchange="renderTable()">
+            <option value="">Alle</option>
+            <option value="custom">Custom</option><option value="universal">Universal</option>
+            <option value="ghs">GHS</option><option value="repserv">Rep/Serv.</option>
+            <option value="musiklover">MusicLover</option><option value="wvk">WVK</option><option value="ersatz">Ersatz</option>
+          </select>
+        </div>
+        <button class="del-btn" onclick="clearFilters()" style="align-self:flex-end;padding:8px 12px">Zurücksetzen</button>
+        <button class="export-btn" onclick="exportCSV()" style="align-self:flex-end">CSV Export</button>
+        <button class="export-btn" onclick="loadData()" style="align-self:flex-end">↻ Aktualisieren</button>
+      </div>
+      <div class="result-count" id="result-count"></div>
+      <div class="tbl-wrapper">
+        <table class="data-table">
+          <thead><tr><th>Datum</th><th>Name</th><th>Produkt</th><th>Lieferant</th><th>Kategorien</th><th></th></tr></thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EINGABE -->
+    <div id="pane-eingabe" class="pane">
+      <div class="form-card">
+        <div class="form-row">
+          <div class="form-field"><div class="form-label">Monat</div>
+            <select id="e-monat" class="form-input">
+              <option value="1">Januar</option><option value="2">Februar</option><option value="3">März</option>
+              <option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option>
+              <option value="7">Juli</option><option value="8">August</option><option value="9">September</option>
+              <option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option>
+            </select>
+          </div>
+          <div class="form-field"><div class="form-label">Datum</div><input type="date" id="e-datum" class="form-input"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-field"><div class="form-label">Name / Vorname</div><input type="text" id="e-name" class="form-input" placeholder="Müller Hans"></div>
+          <div class="form-field"><div class="form-label">Produkt / Typ</div><input type="text" id="e-typ" class="form-input" placeholder="VE Pure, FA 666XB ..."></div>
+        </div>
+        <div class="form-label" style="margin-bottom:10px">Kategorien</div>
+        <div class="checks-grid">
+          <label class="check-item" id="lbl-universal" onclick="toggleCheck(this,'e-universal')"><input type="checkbox" id="e-universal"> Universal</label>
+          <label class="check-item" id="lbl-custom" onclick="toggleCheck(this,'e-custom')"><input type="checkbox" id="e-custom"> Custom</label>
+          <label class="check-item" id="lbl-ghs" onclick="toggleCheck(this,'e-ghs')"><input type="checkbox" id="e-ghs"> GHS</label>
+          <label class="check-item" id="lbl-mulde" onclick="toggleCheck(this,'e-mulde')"><input type="checkbox" id="e-mulde"> Mulde</label>
+          <label class="check-item" id="lbl-repserv" onclick="toggleCheck(this,'e-repserv')"><input type="checkbox" id="e-repserv"> Rep/Serv.</label>
+          <label class="check-item" id="lbl-funk" onclick="toggleCheck(this,'e-funk')"><input type="checkbox" id="e-funk"> Funk</label>
+          <label class="check-item" id="lbl-ambi" onclick="toggleCheck(this,'e-ambi')"><input type="checkbox" id="e-ambi"> Ambi</label>
+          <label class="check-item" id="lbl-musiklover" onclick="toggleCheck(this,'e-musiklover')"><input type="checkbox" id="e-musiklover"> MusicLover</label>
+          <label class="check-item" id="lbl-wvk" onclick="toggleCheck(this,'e-wvk')"><input type="checkbox" id="e-wvk"> WVK</label>
+          <label class="check-item" id="lbl-ersatz" onclick="toggleCheck(this,'e-ersatz')"><input type="checkbox" id="e-ersatz"> Ersatz</label>
+        </div>
+        <div>
+          <button class="submit-btn" id="save-btn" onclick="addEntry()">Speichern</button>
+          <span class="success-msg" id="e-msg">Gespeichert auf OneDrive!</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div>
+
+<!-- MSAL laden -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+
+<script>
+// ════════════════════════════════════
+// KONSTANTEN
+// ════════════════════════════════════
+const MONTHS = ['','Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const SCOPES = ['Files.ReadWrite', 'User.Read'];
+const GRAPH  = 'https://graph.microsoft.com/v1.0';
+
+// ════════════════════════════════════
+// MSAL SETUP
+// ════════════════════════════════════
+let msalApp, account, token;
+let data = [];
+let statMonat = 0;
+let fileId = null;
+
+function initMsal() {
+  msalApp = new msal.PublicClientApplication({
+    auth: {
+      clientId: CONFIG.clientId,
+      authority: `https://login.microsoftonline.com/${CONFIG.tenantId}`,
+      redirectUri: "http://localhost", //redirectUri: window.location.href.split('?')[0],
+    },
+    cache: { cacheLocation: 'localStorage' }
+  });
+
+  msalApp.handleRedirectPromise().then(resp => {
+    if (resp) {
+      account = resp.account;
+      onLoggedIn();
+    } else {
+      const accounts = msalApp.getAllAccounts();
+      if (accounts.length > 0) {
+        account = accounts[0];
+        onLoggedIn();
+      }
+    }
+  }).catch(e => showToast('Fehler beim Anmelden: ' + e.message, true));
+}
+
+async function login() {
+  await msalApp.loginRedirect({ scopes: SCOPES });
+}
+
+function logout() {
+  msalApp.logoutRedirect();
+}
+
+async function getToken() {
+  try {
+    const res = await msalApp.acquireTokenSilent({ scopes: SCOPES, account });
+    return res.accessToken;
+  } catch(e) {
+    const res = await msalApp.acquireTokenPopup({ scopes: SCOPES });
+    return res.accessToken;
+  }
+}
+
+async function graphGet(path) {
+  const tok = await getToken();
+  const r = await fetch(GRAPH + path, { headers: { Authorization: 'Bearer ' + tok } });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function graphPost(path, body) {
+  const tok = await getToken();
+  const r = await fetch(GRAPH + path, {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function graphPatch(path, body) {
+  const tok = await getToken();
+  const r = await fetch(GRAPH + path, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function graphPut(path, bodyText, contentType) {
+  const tok = await getToken();
+  const r = await fetch(GRAPH + path, {
+    method: 'PUT',
+    headers: { Authorization: 'Bearer ' + tok, 'Content-Type': contentType || 'application/octet-stream' },
+    body: bodyText
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+// ════════════════════════════════════
+// EXCEL / ONEDRIVE OPERATIONEN
+// ════════════════════════════════════
+const COL_HEADERS = ['Monat','Datum','Name','Produkt','Universal','Custom','GHS','Mulde','RepServ','Funk','Ambi','MusicLover','WVK','Ersatz'];
+
+async function ensureExcelFile() {
+  setStatus('syncing', 'Suche Excel-Datei...');
+  try {
+    const res = await graphGet(`/me/drive/root:/${CONFIG.excelFile}`);
+    fileId = res.id;
+    await ensureSheet();
+  } catch(e) {
+    // Datei existiert nicht → erstellen
+    setStatus('syncing', 'Erstelle Excel-Datei...');
+    await createExcelFile();
+  }
+}
+
+async function createExcelFile() {
+  // Leere Excel-Datei erstellen via Upload
+  // Wir erstellen eine Session und fügen Daten via Graph Excel API hinzu
+  const tok = await getToken();
+
+  // Erst die Datei anlegen (leer)
+  const uploadRes = await fetch(
+    `${GRAPH}/me/drive/root:/${CONFIG.excelFile}:/content`,
+    {
+      method: 'PUT',
+      headers: { Authorization: 'Bearer ' + tok, 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+      body: new Uint8Array([]) // leere Datei
+    }
+  );
+  const fileData = await uploadRes.json();
+  fileId = fileData.id;
+
+  // Kurz warten bis OneDrive verarbeitet hat
+  await new Promise(r => setTimeout(r, 2000));
+
+  // Tabellenblatt umbenennen / sicherstellen
+  await ensureSheet();
+  // Header schreiben
+  await writeHeaders();
+  // Seed-Daten schreiben
+  await writeAllRows(SEED_DATA);
+  data = [...SEED_DATA];
+}
+
+async function ensureSheet() {
+  try {
+    await graphGet(`/me/drive/items/${fileId}/workbook/worksheets/${encodeURIComponent(CONFIG.sheetName)}`);
+  } catch(e) {
+    // Sheet anlegen
+    await graphPost(`/me/drive/items/${fileId}/workbook/worksheets/add`, { name: CONFIG.sheetName });
+  }
+}
+
+async function writeHeaders() {
+  await graphPatch(
+    `/me/drive/items/${fileId}/workbook/worksheets/${encodeURIComponent(CONFIG.sheetName)}/range(address='A1:N1')`,
+    { values: [COL_HEADERS] }
+  );
+}
+
+async function loadData() {
+  setStatus('syncing', 'Lade Daten...');
+  try {
+    const res = await graphGet(
+      `/me/drive/items/${fileId}/workbook/worksheets/${encodeURIComponent(CONFIG.sheetName)}/usedRange`
+    );
+    const rows = res.values || [];
+    if (rows.length <= 1) { data = []; }
+    else {
+      data = rows.slice(1).map(r => ({
+        monat:      parseInt(r[0]) || 0,
+        datum:      r[1] || '',
+        name:       r[2] || '',
+        typ:        r[3] || '',
+        universal:  parseFloat(r[4]) || 0,
+        custom:     parseFloat(r[5]) || 0,
+        ghs:        parseFloat(r[6]) || 0,
+        mulde:      parseFloat(r[7]) || 0,
+        repserv:    parseFloat(r[8]) || 0,
+        funk:       parseFloat(r[9]) || 0,
+        ambi:       parseFloat(r[10])|| 0,
+        musiklover: parseFloat(r[11])|| 0,
+        wvk:        parseFloat(r[12])|| 0,
+        ersatz:     parseFloat(r[13])|| 0,
+      })).filter(r => r.name);
+    }
+    setStatus('connected', 'Verbunden · ' + data.length + ' Einträge');
+    renderStat();
+    renderTable();
+  } catch(e) {
+    setStatus('error', 'Ladefehler');
+    showToast('Fehler beim Laden: ' + e.message, true);
+  }
+}
+
+async function appendRow(entry) {
+  // Nächste freie Zeile finden
+  const rowNum = data.length + 2; // +1 für Header, +1 weil 1-basiert
+  const range = `A${rowNum}:N${rowNum}`;
+  const values = [[
+    entry.monat, entry.datum, entry.name, entry.typ,
+    entry.universal, entry.custom, entry.ghs, entry.mulde,
+    entry.repserv, entry.funk, entry.ambi, entry.musiklover,
+    entry.wvk, entry.ersatz
+  ]];
+  await graphPatch(
+    `/me/drive/items/${fileId}/workbook/worksheets/${encodeURIComponent(CONFIG.sheetName)}/range(address='${range}')`,
+    { values }
+  );
+}
+
+async function writeAllRows(rows) {
+  if (!rows.length) return;
+  const values = rows.map(r => [
+    r.monat, r.datum, r.name, r.typ,
+    r.universal, r.custom, r.ghs, r.mulde,
+    r.repserv, r.funk, r.ambi, r.musiklover,
+    r.wvk, r.ersatz
+  ]);
+  const endRow = values.length + 1;
+  await graphPatch(
+    `/me/drive/items/${fileId}/workbook/worksheets/${encodeURIComponent(CONFIG.sheetName)}/range(address='A2:N${endRow}')`,
+    { values }
+  );
+}
+
+async function deleteRow(rowIndex) {
+  // Wir schreiben die ganze Tabelle neu ohne die gelöschte Zeile
+  setStatus('syncing', 'Lösche Eintrag...');
+  data.splice(rowIndex, 1);
+  try {
+    // Alten Bereich löschen
+    const oldEnd = data.length + 10;
+    await graphPatch(
+      `/me/drive/items/${fileId}/workbook/worksheets/${encodeURIComponent(CONFIG.sheetName)}/range(address='A2:N${oldEnd}')`,
+      { values: Array(oldEnd).fill(Array(14).fill('')) }
+    );
+    // Neu schreiben
+    if (data.length > 0) await writeAllRows(data);
+    setStatus('connected', 'Verbunden · ' + data.length + ' Einträge');
+    showToast('Eintrag gelöscht');
+    renderTable();
+    renderStat();
+  } catch(e) {
+    setStatus('error', 'Fehler');
+    showToast('Fehler: ' + e.message, true);
+  }
+}
+
+// ════════════════════════════════════
+// UI LOGIC
+// ════════════════════════════════════
+function setStatus(state, text) {
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  dot.className = 'status-dot ' + state;
+  txt.textContent = text;
+}
+
+function showToast(msg, isErr) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' error' : '');
+  setTimeout(() => { t.className = 'toast'; }, 3500);
+}
+
+function onLoggedIn() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+  document.getElementById('main-nav').style.display = 'flex';
+  const now = new Date();
+  document.getElementById('e-datum').value = now.toISOString().split('T')[0];
+  document.getElementById('e-monat').value = now.getMonth() + 1;
+  ensureExcelFile().then(() => loadData());
+}
+
+function showPane(id, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'statistik') renderStat();
+  if (id === 'suche') renderTable();
+}
+
+// ── LIEFERANT ──
+function getSupplier(typ) {
+  if (!typ) return 'Sonstige';
+  const t = typ.toUpperCase().replace(/\s+/g,'');
+  if (/VE\d|VEONE|VEPRO|VEPURE|VEZEN|VEXCON|VE8|VE5|VE2|VE7|VE4|VE3|GOLIVE/.test(t)) return 'Vision Ears';
+  if (/FA\d|FA6|RAPTURE|DREAM|ACE|FA3|FA4/.test(t)) return 'Fischer Amps';
+  if (/FIBAE|M[ÜU]SE|BLADE|DUNE|WAVE|FLAME|AVANT|SOUL|PM[35]|HYBRID/.test(t)) return 'Custom Art';
+  if (/H22|H33|H35|22MINI|PP8|PMX/.test(t)) return 'HEAROS';
+  if (/SD\d|LIFEPRO|STREETLIFE/.test(t)) return 'InEar';
+  if (/UE\d|UELIVE|UERR|UEPREMIER/.test(t)) return 'Ultimate Ears';
+  if (/RH\d|GO2ROCK|3FORLIVE/.test(t)) return 'RH Acustics';
+  if (/A\d[TS]|N8|FOURTE|64[ABCDE]/.test(t)) return '64 Audio';
+  return 'Sonstige';
+}
+
+function getBadgeClass(sup) {
+  return {'Vision Ears':'b-ve','Fischer Amps':'b-fa','Custom Art':'b-ca','HEAROS':'b-he','InEar':'b-ie','Ultimate Ears':'b-ue','RH Acustics':'b-rh','64 Audio':'b-64'}[sup] || 'b-other';
+}
+
+function getCats(r) {
+  const c = [];
+  if (r.universal > 0) c.push('Universal');
+  if (r.custom > 0) c.push('Custom');
+  if (r.ghs > 0) c.push('GHS');
+  if (r.mulde > 0) c.push('Mulde');
+  if (r.repserv > 0) c.push('Rep/Serv.');
+  if (r.funk > 0) c.push('Funk');
+  if (r.ambi > 0) c.push('Ambi');
+  if (r.musiklover > 0) c.push('MusicLover');
+  if (r.wvk > 0) c.push('WVK');
+  if (r.ersatz > 0) c.push('Ersatz');
+  return c;
+}
+
+// ── STATISTIK ──
+let statMonat2 = 0;
+function renderStat() {
+  const months = [...new Set(data.map(r => r.monat))].sort((a,b)=>a-b);
+  document.getElementById('month-pills').innerHTML =
+    `<div class="mpill ${statMonat2===0?'active':''}" onclick="setStatM(0)">Alle</div>` +
+    months.map(m => `<div class="mpill ${statMonat2===m?'active':''}" onclick="setStatM(${m})">${MONTHS[m]}</div>`).join('');
+
+  const d = statMonat2 === 0 ? data : data.filter(r => r.monat === statMonat2);
+  const iem = d.reduce((s,r) => s+(r.custom||0)+(r.universal||0), 0);
+  const ghs = d.reduce((s,r) => s+(r.ghs||0), 0);
+  const rep = d.reduce((s,r) => s+(r.repserv||0), 0);
+  const fmt = v => v % 1 === 0 ? v : v.toFixed(1);
+
+  document.getElementById('metrics-row').innerHTML = `
+    <div class="metric-card"><div class="metric-label">Kontakte</div><div class="metric-value">${d.length}</div></div>
+    <div class="metric-card"><div class="metric-label">IEM Total</div><div class="metric-value">${fmt(iem)}</div></div>
+    <div class="metric-card"><div class="metric-label">GHS</div><div class="metric-value">${fmt(ghs)}</div></div>
+    <div class="metric-card"><div class="metric-label">Rep / Serv.</div><div class="metric-value">${rep}</div></div>`;
+
+  const pc = {}; d.forEach(r => { if(r.typ?.trim()) { const k=r.typ.trim(); pc[k]=(pc[k]||0)+1; } });
+  const prods = Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const maxP = prods[0]?prods[0][1]:1;
+  document.getElementById('chart-products').innerHTML = prods.length ?
+    prods.map(([p,c]) => `<div class="bar-row"><div class="bar-label" title="${p}">${p}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/maxP*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join('') :
+    '<div class="empty-state">Keine Daten</div>';
+
+  const sc = {}; d.forEach(r => { const s=getSupplier(r.typ); sc[s]=(sc[s]||0)+1; });
+  const sups = Object.entries(sc).sort((a,b)=>b[1]-a[1]);
+  const maxS = sups[0]?sups[0][1]:1;
+  document.getElementById('chart-suppliers').innerHTML = sups.map(([s,c]) =>
+    `<div class="bar-row"><div class="bar-label" title="${s}">${s}</div><div class="bar-track"><div class="bar-fill blue" style="width:${Math.round(c/maxS*100)}%"></div></div><div class="bar-num">${c}</div></div>`
+  ).join('');
+}
+
+function setStatM(m) { statMonat2 = m; renderStat(); }
+
+// ── SUCHE ──
+function getFiltered() {
+  const n = (document.getElementById('f-name').value||'').toLowerCase();
+  const p = (document.getElementById('f-prod').value||'').toLowerCase();
+  const m = document.getElementById('f-monat').value;
+  const k = document.getElementById('f-kat').value;
+  return data.filter(r => {
+    if (n && !r.name.toLowerCase().includes(n)) return false;
+    if (p && !r.typ.toLowerCase().includes(p)) return false;
+    if (m && r.monat != m) return false;
+    if (k && !(r[k] > 0)) return false;
+    return true;
+  });
+}
+
+function renderTable() {
+  const rows = getFiltered();
+  document.getElementById('result-count').textContent = rows.length + ' Einträge';
+  const tb = document.getElementById('table-body');
+  if (!rows.length) { tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">Keine Einträge gefunden</div></td></tr>'; return; }
+  tb.innerHTML = rows.map(r => {
+    const sup = getSupplier(r.typ);
+    const cats = getCats(r).map(c => `<span class="cat-tag">${c}</span>`).join('');
+    const idx = data.indexOf(r);
+    return `<tr>
+      <td style="color:var(--text2);font-family:'DM Mono',monospace;font-size:12px">${r.datum||'—'}</td>
+      <td style="font-weight:500">${r.name}</td>
+      <td>${r.typ||'—'}</td>
+      <td><span class="badge ${getBadgeClass(sup)}">${sup}</span></td>
+      <td>${cats||'—'}</td>
+      <td><button class="del-btn" onclick="deleteRow(${idx})">×</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function clearFilters() {
+  ['f-name','f-prod'].forEach(id => document.getElementById(id).value = '');
+  ['f-monat','f-kat'].forEach(id => document.getElementById(id).value = '');
+  renderTable();
+}
+
+function exportCSV() {
+  const rows = getFiltered();
+  const hdr = 'Monat,Datum,Name,Produkt,Universal,Custom,GHS,Mulde,RepServ,Funk,Ambi,MusicLover,WVK,Ersatz';
+  const csv = [hdr, ...rows.map(r => [r.monat,r.datum,`"${r.name}"`,`"${r.typ}"`,r.universal,r.custom,r.ghs,r.mulde,r.repserv,r.funk,r.ambi,r.musiklover,r.wvk,r.ersatz].join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'IEM-Export-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// ── EINGABE ──
+function toggleCheck(lbl, id) {
+  const cb = document.getElementById(id);
+  cb.checked = !cb.checked;
+  lbl.classList.toggle('checked', cb.checked);
+}
+
+async function addEntry() {
+  const name = document.getElementById('e-name').value.trim();
+  if (!name) { alert('Bitte Name eingeben'); return; }
+  const entry = {
+    monat: +document.getElementById('e-monat').value,
+    datum: document.getElementById('e-datum').value,
+    name, typ: document.getElementById('e-typ').value.trim(),
+    universal:  document.getElementById('e-universal').checked  ? 1 : 0,
+    custom:     document.getElementById('e-custom').checked     ? 1 : 0,
+    ghs:        document.getElementById('e-ghs').checked        ? 1 : 0,
+    mulde:      document.getElementById('e-mulde').checked      ? 1 : 0,
+    repserv:    document.getElementById('e-repserv').checked    ? 1 : 0,
+    funk:       document.getElementById('e-funk').checked       ? 1 : 0,
+    ambi:       document.getElementById('e-ambi').checked       ? 1 : 0,
+    musiklover: document.getElementById('e-musiklover').checked ? 1 : 0,
+    wvk:        document.getElementById('e-wvk').checked        ? 1 : 0,
+    ersatz:     document.getElementById('e-ersatz').checked     ? 1 : 0,
+  };
+
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Speichern...';
+  setStatus('syncing', 'Speichere...');
+
+  try {
+    await appendRow(entry);
+    data.push(entry);
+    setStatus('connected', 'Verbunden · ' + data.length + ' Einträge');
+    showToast('Gespeichert auf OneDrive!');
+
+    // Formular zurücksetzen
+    document.getElementById('e-name').value = '';
+    document.getElementById('e-typ').value = '';
+    ['universal','custom','ghs','mulde','repserv','funk','ambi','musiklover','wvk','ersatz'].forEach(k => {
+      document.getElementById('e-'+k).checked = false;
+      document.getElementById('lbl-'+k).classList.remove('checked');
+    });
+    const msg = document.getElementById('e-msg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 2500);
+  } catch(e) {
+    setStatus('error', 'Speicherfehler');
+    showToast('Fehler: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Speichern';
+  }
+}
+
+// ════════════════════════════════════
+// SEED DATEN (2026)
+// ════════════════════════════════════
+const SEED_DATA = [
+  {monat:1,datum:"2026-01-05",name:"Knecht Davis",typ:"VE One",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:1,datum:"2026-01-12",name:"Furler Denise",typ:"VE3.2",universal:1,custom:0,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Tescari Luca",typ:"VE Pure",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:1,datum:"2026-01-12",name:"Baumgartner David",typ:"FA 4XB",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Kiefer Linda",typ:"VE Pro",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Killenberger Collin",typ:"Fibae 3",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Zehnder Philipp",typ:"Fibae 3",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Sonderegger Anthony",typ:"Fibae 3",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Boner Christoph",typ:"Muse",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-12",name:"Bopp Andreas",typ:"FA 666XB",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-14",name:"Sager Heinz",typ:"Dream",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-14",name:"Seiler Luca",typ:"UE7",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-15",name:"Zeller Beat",typ:"ACE",universal:0,custom:1,ghs:1,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-15",name:"Mettler Trudi",typ:"H35",universal:0,custom:1,ghs:1,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-19",name:"Strittmatter Armin",typ:"FA 666XB",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-19",name:"Schlegel Michael",typ:"FA 666",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:1,datum:"2026-01-26",name:"Schneider Thomas",typ:"Xcon",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-26",name:"Sievers David",typ:"Xcon",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:1,datum:"2026-01-27",name:"Born Volker",typ:"Dream",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:1,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-29",name:"Marin Jan",typ:"GoLive",universal:1,custom:0,ghs:1,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-29",name:"Kalt Martin",typ:"Müse",universal:0,custom:1,ghs:1,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:1,datum:"2026-01-30",name:"Businger Steve",typ:"FA 666XB",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:2,datum:"2026-02-02",name:"Wyttenbach Daniel",typ:"VE Pure",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:2,datum:"2026-02-03",name:"Renggli Andreas",typ:"GoLive",universal:1,custom:0,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:2,datum:"2026-02-12",name:"Kasper-Rölli Sabine",typ:"FA 666",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:2,datum:"2026-02-18",name:"Urbanczik Yannick",typ:"VE Pure",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:2,datum:"2026-02-23",name:"Bühlmann Simon",typ:"FA 666 XB",universal:0,custom:1,ghs:1,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:2,datum:"2026-02-26",name:"Baier Rafael",typ:"FIBAE 7",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:2,datum:"2026-02-28",name:"Moine Sebastian",typ:"VE Zen",universal:0,custom:1,ghs:2,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:3,datum:"2026-03-02",name:"Horber Tabea",typ:"Müse",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:3,datum:"2026-03-13",name:"Oertig Marina",typ:"VE Pure",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:1},
+  {monat:3,datum:"2026-03-13",name:"Hitz Andri",typ:"FIBAE 5",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:3,datum:"2026-03-18",name:"Bircher Mattia",typ:"FA666XB",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:3,datum:"2026-03-23",name:"Lüscher Musik Daniel",typ:"GoLive",universal:2,custom:0,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:2,ersatz:0},
+  {monat:3,datum:"2026-03-31",name:"Müller Beat",typ:"VE One",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:4,datum:"2026-04-02",name:"Widmer Sound",typ:"GoLive",universal:1,custom:0,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+  {monat:4,datum:"2026-04-02",name:"Salsi Diana",typ:"UE7",universal:0,custom:1,ghs:0,mulde:0,repserv:0,funk:0,ambi:0,musiklover:0,wvk:0,ersatz:0},
+];
+
+// ════════════════════════════════════
+// START
+// ════════════════════════════════════
+initMsal();
+</script>
+</body>
+</html>

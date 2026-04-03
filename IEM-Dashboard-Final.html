@@ -117,6 +117,9 @@ input[type=text]{min-width:150px}select{min-width:120px}
 .popup-btns{display:flex;gap:10px;justify-content:flex-end}
 .btn-cancel{padding:8px 16px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:13px;color:var(--text2)}
 .btn-send{padding:8px 18px;background:#15803d;color:white;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500}
+.nl-copy-field{padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:13px;color:var(--text);min-height:36px;transition:all .15s}
+.nl-copy-field:hover{border-color:#15803d;background:#f0fdf4}
+.nl-copy-field.copied{border-color:#15803d;background:#dcfce7;color:#15803d}
 </style>
 </head>
 <body>
@@ -256,20 +259,37 @@ input[type=text]{min-width:150px}select{min-width:120px}
 
 <!-- Newsletter Popup -->
 <div id="newsletter-popup" class="popup-overlay" style="display:none">
-  <div class="popup-card">
-    <h3>Newsletter anmelden</h3>
-    <p>Daten für das Earline-Formular. Bitte E-Mail und Telefon ergänzen falls leer.</p>
-    <div class="popup-fields">
-      <div class="popup-row">
-        <div><div class="form-label" style="margin-bottom:4px">Vorname</div><input type="text" id="nl-vorname" class="form-input" style="width:100%"></div>
-        <div><div class="form-label" style="margin-bottom:4px">Nachname</div><input type="text" id="nl-nachname" class="form-input" style="width:100%"></div>
+  <div class="popup-card" style="max-width:480px">
+    <h3>📋 Newsletter anmelden</h3>
+    <p style="margin-bottom:16px">Klicke auf ein Feld um es zu kopieren, dann ins Earline-Formular einfügen.</p>
+    <div style="background:var(--surface2);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <div class="form-label" style="margin-bottom:4px">Vorname</div>
+          <div class="nl-copy-field" id="nl-vorname" onclick="copyField('nl-vorname')" title="Klicken zum Kopieren"></div>
+        </div>
+        <div>
+          <div class="form-label" style="margin-bottom:4px">Nachname</div>
+          <div class="nl-copy-field" id="nl-nachname" onclick="copyField('nl-nachname')" title="Klicken zum Kopieren"></div>
+        </div>
       </div>
-      <div><div class="form-label" style="margin-bottom:4px">E-Mail *</div><input type="email" id="nl-email" class="form-input" style="width:100%"></div>
-      <div><div class="form-label" style="margin-bottom:4px">Telefon *</div><input type="tel" id="nl-tel" class="form-input" style="width:100%"></div>
+      <div style="margin-bottom:10px">
+        <div class="form-label" style="margin-bottom:4px">E-Mail</div>
+        <div class="nl-copy-field" id="nl-email" onclick="copyField('nl-email')" title="Klicken zum Kopieren"></div>
+      </div>
+      <div>
+        <div class="form-label" style="margin-bottom:4px">Telefon</div>
+        <div class="nl-copy-field" id="nl-tel" onclick="copyField('nl-tel')" title="Klicken zum Kopieren"></div>
+      </div>
+    </div>
+    <div id="nl-missing" style="display:none;background:var(--danger-light);color:var(--danger);padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;margin-bottom:14px">
+      ⚠ E-Mail oder Telefon fehlt – bitte direkt im Formular eingeben.
     </div>
     <div class="popup-btns">
-      <button class="btn-cancel" onclick="closeNewsletter()">Abbrechen</button>
-      <button class="btn-send" onclick="sendNewsletter()">Zum Formular öffnen</button>
+      <button class="btn-cancel" onclick="closeNewsletter()">Schliessen</button>
+      <button class="btn-send" onclick="openEarlineForm()" style="display:flex;align-items:center;gap:6px">
+        🔗 Earline-Formular öffnen
+      </button>
     </div>
   </div>
 </div>
@@ -427,24 +447,35 @@ let nlEntry=null;
 function openNewsletter(entry){
   nlEntry=entry;
   const parts=entry.name.trim().split(' ');
-  const vorname=parts.slice(1).join(' ')||parts[0];
   const nachname=parts[0];
-  document.getElementById('nl-vorname').value=vorname;
-  document.getElementById('nl-nachname').value=nachname;
-  document.getElementById('nl-email').value=entry.email||'';
-  document.getElementById('nl-tel').value=entry.telefon||'';
+  const vorname=parts.slice(1).join(' ')||parts[0];
+  setNlField('nl-vorname', vorname);
+  setNlField('nl-nachname', nachname);
+  setNlField('nl-email', entry.email||'');
+  setNlField('nl-tel', entry.telefon||'');
+  const missing=!entry.email||!entry.telefon;
+  document.getElementById('nl-missing').style.display=missing?'block':'none';
   document.getElementById('newsletter-popup').style.display='flex';
 }
+function setNlField(id, val){
+  const el=document.getElementById(id);
+  el.textContent=val||'—';
+  el.dataset.val=val||'';
+  el.classList.remove('copied');
+}
+function copyField(id){
+  const el=document.getElementById(id);
+  const val=el.dataset.val;
+  if(!val||val==='')return;
+  navigator.clipboard.writeText(val).then(()=>{
+    el.classList.add('copied');
+    el.textContent='✓ Kopiert: '+val;
+    setTimeout(()=>{el.classList.remove('copied');el.textContent=val;},2000);
+  });
+}
 function closeNewsletter(){document.getElementById('newsletter-popup').style.display='none';}
-function sendNewsletter(){
-  const vn=document.getElementById('nl-vorname').value;
-  const nn=document.getElementById('nl-nachname').value;
-  const em=document.getElementById('nl-email').value;
-  const tel=document.getElementById('nl-tel').value;
-  if(!em||!tel){alert('Bitte E-Mail und Telefon ausfüllen');return;}
-  const params=new URLSearchParams({firstName:vn,lastName:nn,email:em,phone:tel});
-  window.open(CONFIG.newsletterUrl+'?'+params.toString(),'_blank');
-  closeNewsletter();
+function openEarlineForm(){
+  window.open(CONFIG.newsletterUrl,'_blank');
 }
 function openNewsletterFromTable(idx){
   const entry=data[idx];

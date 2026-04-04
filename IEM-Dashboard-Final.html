@@ -107,7 +107,6 @@ input[type=text]{min-width:150px}select{min-width:120px}
 .toast.error{background:var(--danger)}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* Newsletter popup */
 .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:center;justify-content:center}
 .popup-card{background:var(--surface);border-radius:var(--radius);padding:28px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
 .popup-card h3{font-size:16px;font-weight:600;margin-bottom:6px}
@@ -412,13 +411,11 @@ async function addEntry(){
     data.push(entry);
     setStatus('connected','Google Sheets · '+data.length+' Einträge');
     showToast('Gespeichert!');
-    // Reset form
     document.getElementById('e-name').value='';document.getElementById('e-typ').value='';
     document.getElementById('e-email').value='';document.getElementById('e-telefon').value='';
     ['universal','custom','ghs','mulde','repserv','funk','ambi','musiklover','wvk','ersatz'].forEach(k=>{
       document.getElementById('e-'+k).checked=false;document.getElementById('lbl-'+k).classList.remove('checked');
     });
-    // Show newsletter prompt if email+phone filled
     if(entry.email||entry.telefon){
       openNewsletter(entry);
     } else {
@@ -474,26 +471,23 @@ function copyField(id){
   });
 }
 function closeNewsletter(){document.getElementById('newsletter-popup').style.display='none';}
-function openEarlineForm(){
-  window.open(CONFIG.newsletterUrl,'_blank');
-}
-function openNewsletterFromTable(idx){
-  const entry=data[idx];
-  openNewsletter(entry);
-}
+function openEarlineForm(){window.open(CONFIG.newsletterUrl,'_blank');}
+function openNewsletterFromTable(idx){openNewsletter(data[idx]);}
 
 // ── LIEFERANT ──
 function getSupplier(typ){
   if(!typ)return 'Sonstige';
   const t=typ.toUpperCase().replace(/\s+/g,'');
-  if(/VE\d|VEONE|VEPRO|VEPURE|VEZEN|VEXCON|VE8|VE5|VE2|VE7|VE4|VE3|GOLIVE/.test(t))return 'Vision Ears';
-  if(/FA\d|FA6|RAPTURE|DREAM|ACE|FA3|FA4/.test(t))return 'Fischer Amps';
-  if(/FIBAE|M[ÜU]SE|BLADE|DUNE|WAVE|FLAME|AVANT|SOUL|PM[35]|HYBRID/.test(t))return 'Custom Art';
-  if(/H22|H33|H35|22MINI|PP8|PMX/.test(t))return 'HEAROS';
-  if(/SD\d|LIFEPRO|STREETLIFE/.test(t))return 'InEar';
-  if(/UE\d|UELIVE|UERR/.test(t))return 'Ultimate Ears';
-  if(/RH\d|GO2ROCK/.test(t))return 'RH Acustics';
-  if(/A\d[TS]|N8|FOURTE/.test(t))return '64 Audio';
+  if(/^VE\d|^VEONE$|^VEPRO$|^VEPURE$|^VEZEN$|^VEXCON$|^VE8$|^VE5$|^VE2$|^VE7$|^VE4|^VE3|^GOLIVE$|^VE6/.test(t))return 'Vision Ears';
+  if(/^FA\d|^FA6|RAPTURE|^FA3$|^FA4/.test(t))return 'Fischer Amps';
+  if(/^FIBAE|^ACE$|^HYBRID/.test(t))return 'Custom Art';
+  if(/^H22|^H33|^H35|22MINI|^PP8$|^PMX$|^MUSE$|^MÜSE$|^DUNE$|^DÜNE$|^WAVE$|^BLADE$|^FLAME$/.test(t))return 'HEAROS';
+  if(/^SD\d|^LIFEPRO|^LIVEPRO|^STREETLIFE/.test(t))return 'InEar';
+  if(/^UE\d|^UELIVE$|^UERR$|^3FORLIVE$/.test(t))return 'Ultimate Ears';
+  if(/^RH\d|^GO2ROCK$/.test(t))return 'RH Acustics';
+  if(/^A\d+[TS]$|^N8$|^FOURTE$/.test(t))return '64 Audio';
+  if(/^SH\d|^AT-\d|^SH-\d/.test(t))return 'Soundz';
+  if(/^SIX$|^QUAD$|^PM[35]$/.test(t))return 'P-EAR-S';
   return 'Sonstige';
 }
 function getBadgeClass(s){return{'Vision Ears':'b-ve','Fischer Amps':'b-fa','Custom Art':'b-ca','HEAROS':'b-he','InEar':'b-ie','Ultimate Ears':'b-ue','RH Acustics':'b-rh','64 Audio':'b-64'}[s]||'b-other';}
@@ -511,7 +505,9 @@ function renderStat(){
     `<div class="mpill ${statMonat===0?'active':''}" onclick="setStatM(0)">Alle</div>`+
     months.map(m=>`<div class="mpill ${statMonat===m?'active':''}" onclick="setStatM(${m})">${MONTHS[m]}</div>`).join('');
   const d=statMonat===0?yearData:yearData.filter(r=>r.monat===statMonat);
-  const iem=d.reduce((s,r)=>s+(r.custom||0)+(r.universal||0),0);
+
+  // FIX: IEM Total = alle Einträge mit einem Produkt (typ), nicht nur custom+universal Checkboxen
+  const iem = d.filter(r => r.typ && r.typ.trim() !== '').length;
   const ghs=d.reduce((s,r)=>s+(r.ghs||0),0);
   const rep=d.reduce((s,r)=>s+(r.repserv||0),0);
   const fmt=v=>v%1===0?v:v.toFixed(1);
@@ -520,10 +516,12 @@ function renderStat(){
     <div class="metric-card"><div class="metric-label">IEM Total</div><div class="metric-value">${fmt(iem)}</div></div>
     <div class="metric-card"><div class="metric-label">GHS</div><div class="metric-value">${fmt(ghs)}</div></div>
     <div class="metric-card"><div class="metric-label">Rep / Serv.</div><div class="metric-value">${rep}</div></div>`;
+
   const pc={};d.forEach(r=>{if(r.typ?.trim()){const k=r.typ.trim();pc[k]=(pc[k]||0)+1;}});
   const prods=Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,12);
   const maxP=prods[0]?prods[0][1]:1;
   document.getElementById('chart-products').innerHTML=prods.length?prods.map(([p,c])=>`<div class="bar-row"><div class="bar-label" title="${p}">${p}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/maxP*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join(''):'<div class="empty-state">Keine Daten</div>';
+
   const sc={};d.forEach(r=>{const s=getSupplier(r.typ);sc[s]=(sc[s]||0)+1;});
   const sups=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
   const maxS=sups[0]?sups[0][1]:1;

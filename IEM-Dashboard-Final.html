@@ -357,9 +357,16 @@ input[type=date].form-input{min-width:unset}
 async function loadSheetData(){
   setStatus('sync','Verbinde mit Sheets…');
   try{
-    const res=await fetch(CONFIG.scriptUrl);
-    const rows=await res.json();
-    // Erste Zeile sind Headers, ab Zeile 2 Daten
+    const res=await fetch(CONFIG.scriptUrl+'?callback=_cb', {mode:'no-cors'});
+    // no-cors kann keine Antwort lesen – nutze JSONP stattdessen
+    loadSheetDataJSONP();
+  }catch(e){
+    loadSheetDataJSONP();
+  }
+}
+
+function loadSheetDataJSONP(){
+  window._cb=function(rows){
     const dataRows=rows.slice(1).filter(r=>r[2]);
     const sheetEntries=dataRows.map(r=>({
       Monat:parseInt(r[0])||0,Datum:String(r[1]||''),Name:String(r[2]||''),
@@ -374,10 +381,11 @@ async function loadSheetData(){
     sheetEntries.forEach(r=>{if(!existing.has(r.Name+'|'+r.Datum)){DATA.push(r);neu++;}});
     if(neu>0){renderStat();renderSearch();}
     setStatus('ok',`Sheets verbunden · ${sheetEntries.length} Einträge`);
-  }catch(e){
-    console.error(e);
-    setStatus('','Sheets nicht erreichbar – lokale Daten aktiv');
-  }
+  };
+  const s=document.createElement('script');
+  s.src=CONFIG.scriptUrl+'?callback=_cb';
+  s.onerror=()=>setStatus('','Sheets nicht erreichbar – lokale Daten aktiv');
+  document.head.appendChild(s);
 }
 
 async function saveToSheet(entry){

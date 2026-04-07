@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>IEM Dashboard</title>
 <script>
 const CONFIG = {
@@ -506,7 +507,6 @@ function renderStat(){
     months.map(m=>`<div class="mpill ${statMonat===m?'active':''}" onclick="setStatM(${m})">${MONTHS[m]}</div>`).join('');
   const d=statMonat===0?yearData:yearData.filter(r=>r.monat===statMonat);
 
-  // FIX: IEM Total = alle Einträge mit einem Produkt (typ), nicht nur custom+universal Checkboxen
   const iem = d.filter(r => r.typ && r.typ.trim() !== '').length;
   const ghs=d.reduce((s,r)=>s+(r.ghs||0),0);
   const rep=d.reduce((s,r)=>s+(r.repserv||0),0);

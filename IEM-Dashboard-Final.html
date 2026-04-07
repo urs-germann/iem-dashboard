@@ -401,6 +401,9 @@ function onLoggedIn(){
   const now=new Date();
   document.getElementById('e-datum').value=now.toISOString().split('T')[0];
   document.getElementById('e-monat').value=now.getMonth()+1;
+  // Zuerst lokale Daten anzeigen, dann Sheets laden
+  renderStat();
+  renderSearch();
   loadSheetData();
 }
 
@@ -430,7 +433,7 @@ async function sheetsEnsureHeaders(){
 }
 
 async function loadSheetData(){
-  setStatus('sync','Lade Sheets-Daten…');
+  setStatus('sync','Verbinde mit Sheets…');
   try{
     await sheetsEnsureHeaders();
     const res=await sheetsGet(`${CONFIG.sheetName}!A2:Q100000`);
@@ -442,12 +445,17 @@ async function loadSheetData(){
       'Mulde':parseFloat(r[10])||0,'Rep/Serv.':parseFloat(r[11])||0,'Funk':parseFloat(r[12])||0,
       'Ambi':parseFloat(r[13])||0,'MusikLover':parseFloat(r[14])||0,'WVK':parseFloat(r[15])||0,'Ersatz':parseFloat(r[16])||0,
     })).filter(r=>r.Monat>0);
-    // Merge: base DATA (Excel) + new Sheet entries (avoid duplicates by Name+Datum)
+    // Merge: base DATA (Excel) + neue Sheet-Einträge (keine Duplikate)
     const existing=new Set(DATA.map(r=>r.Name+'|'+r.Datum));
-    sheetEntries.forEach(r=>{if(!existing.has(r.Name+'|'+r.Datum)){DATA.push(r);}});
-    setStatus('ok',`Sheets · ${sheetEntries.length} neue Einträge`);
-    renderStat();renderSearch();
-  }catch(e){setStatus('','Sheets-Fehler');showToast('Sheets-Fehler: '+e.message,true);}
+    let neu=0;
+    sheetEntries.forEach(r=>{if(!existing.has(r.Name+'|'+r.Datum)){DATA.push(r);neu++;}});
+    if(neu>0){renderStat();renderSearch();}
+    setStatus('ok',`Sheets verbunden · ${sheetEntries.length} Einträge`);
+  }catch(e){
+    console.error(e);
+    setStatus('','Sheets-Fehler – lokale Daten aktiv');
+    showToast('Sheets nicht erreichbar – lokale Daten werden angezeigt',false);
+  }
 }
 
 function setStatus(state,text){
@@ -457,6 +465,9 @@ function setStatus(state,text){
 }
 
 window.onload=()=>{
+  // Login-Screen sicherstellen
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
   if(typeof google!=='undefined'&&google.accounts)initGoogle();
   else document.querySelector('script[src*="gsi"]').addEventListener('load',initGoogle);
 };

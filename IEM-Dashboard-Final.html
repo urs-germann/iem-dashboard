@@ -56,7 +56,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
 .chart-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:14px}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px}
-.bar-label{min-width:100px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
+.bar-label{min-width:110px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
 .bar-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
 .bar-fill{height:100%;border-radius:4px;background:var(--accent)}
 .bar-fill.blue{background:var(--accent2)}
@@ -75,7 +75,7 @@ input[type=text]{min-width:150px}select{min-width:120px}
 .data-table tr:last-child td{border-bottom:none}
 .data-table tr:hover td{background:var(--surface2)}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
-.b-ve{background:#ede9fe;color:#4c1d95}.b-fa{background:#dbeafe;color:#1e3a8a}.b-ca{background:#dcfce7;color:#14532d}.b-he{background:#fef3c7;color:#78350f}.b-ie{background:#d1fae5;color:#064e3b}.b-ue{background:#fce7f3;color:#831843}.b-rh{background:#e0e7ff;color:#1e1b4b}.b-64{background:#fff7ed;color:#7c2d12}.b-other{background:var(--surface2);color:var(--text2)}
+.b-ve{background:#ede9fe;color:#4c1d95}.b-fa{background:#dbeafe;color:#1e3a8a}.b-ca{background:#dcfce7;color:#14532d}.b-he{background:#fef3c7;color:#78350f}.b-ie{background:#d1fae5;color:#064e3b}.b-ue{background:#fce7f3;color:#831843}.b-rh{background:#e0e7ff;color:#1e1b4b}.b-64{background:#fff7ed;color:#7c2d12}.b-sz{background:#fdf4ff;color:#6b21a8}.b-pe{background:#ecfdf5;color:#065f46}.b-other{background:var(--surface2);color:var(--text2)}
 .cat-tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:500;background:var(--surface2);color:var(--text2);margin-right:2px;border:1px solid var(--border)}
 .btn-news{background:none;border:1px solid #15803d;border-radius:var(--radius-sm);color:#15803d;cursor:pointer;padding:3px 8px;font-size:11px;font-weight:500;transition:all .15s;white-space:nowrap}
 .btn-news:hover{background:#15803d;color:white}
@@ -86,6 +86,8 @@ input[type=text]{min-width:150px}select{min-width:120px}
 .form-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:160px}
 .form-label{font-size:12px;font-weight:500;color:var(--text2)}
 .form-input{width:100%;padding:9px 12px;min-width:unset}
+.supplier-hint{font-size:11px;color:#15803d;margin-top:3px;font-style:italic;min-height:16px}
+.supplier-auto{border-color:#86efac!important;background:#f0fdf4!important}
 .section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:10px;margin-top:4px}
 .checks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:8px;margin-bottom:20px}
 .check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;font-size:13px;color:var(--text2)}
@@ -96,8 +98,6 @@ input[type=text]{min-width:150px}select{min-width:120px}
 .submit-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;background:var(--text);color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
 .submit-btn:hover{opacity:.85}
 .submit-btn:disabled{opacity:.4;cursor:not-allowed}
-.newsletter-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:#15803d;color:white;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;text-decoration:none}
-.newsletter-btn:hover{opacity:.85}
 .success-msg{font-size:12px;color:#15803d;font-weight:500;opacity:0;transition:opacity .3s}
 .success-msg.show{opacity:1}
 .export-btn{padding:6px 14px;border:1px solid var(--border);background:var(--surface);border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:var(--text2);transition:all .15s}
@@ -112,8 +112,6 @@ input[type=text]{min-width:150px}select{min-width:120px}
 .popup-card{background:var(--surface);border-radius:var(--radius);padding:28px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
 .popup-card h3{font-size:16px;font-weight:600;margin-bottom:6px}
 .popup-card p{color:var(--text2);font-size:13px;margin-bottom:20px}
-.popup-fields{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.popup-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .popup-btns{display:flex;gap:10px;justify-content:flex-end}
 .btn-cancel{padding:8px 16px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:13px;color:var(--text2)}
 .btn-send{padding:8px 18px;background:#15803d;color:white;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500}
@@ -159,7 +157,7 @@ input[type=text]{min-width:150px}select{min-width:120px}
       <div class="month-pills" id="month-pills"></div>
       <div class="metrics-row" id="metrics-row"></div>
       <div class="charts-grid">
-        <div class="chart-card"><div class="chart-title">Top Produkte</div><div id="chart-products"></div></div>
+        <div class="chart-card"><div class="chart-title">Alle Produkte</div><div id="chart-products"></div></div>
         <div class="chart-card"><div class="chart-title">Lieferanten</div><div id="chart-suppliers"></div></div>
       </div>
     </div>
@@ -168,9 +166,7 @@ input[type=text]{min-width:150px}select{min-width:120px}
     <div id="pane-suche" class="pane">
       <div class="filter-bar">
         <div class="filter-field"><div class="filter-label">Jahr</div>
-          <select id="f-jahr" onchange="renderTable()">
-            <option value="">Alle</option>
-          </select>
+          <select id="f-jahr" onchange="renderTable()"><option value="">Alle</option></select>
         </div>
         <div class="filter-field"><div class="filter-label">Monat</div>
           <select id="f-monat" onchange="renderTable()">
@@ -183,6 +179,15 @@ input[type=text]{min-width:150px}select{min-width:120px}
         </div>
         <div class="filter-field"><div class="filter-label">Name</div><input type="text" id="f-name" placeholder="Name..." oninput="renderTable()"></div>
         <div class="filter-field"><div class="filter-label">Produkt</div><input type="text" id="f-prod" placeholder="Produkt..." oninput="renderTable()"></div>
+        <div class="filter-field"><div class="filter-label">Lieferant</div>
+          <select id="f-lief" onchange="renderTable()">
+            <option value="">Alle</option>
+            <option>Vision Ears</option><option>Fischer Amps</option><option>Custom Art</option>
+            <option>HEAROS</option><option>InEar</option><option>Ultimate Ears</option>
+            <option>RH Acustics</option><option>64 Audio</option><option>Soundz</option>
+            <option>P-EAR-S</option><option>Sonstige</option>
+          </select>
+        </div>
         <div class="filter-field"><div class="filter-label">Kategorie</div>
           <select id="f-kat" onchange="renderTable()">
             <option value="">Alle</option>
@@ -228,11 +233,34 @@ input[type=text]{min-width:150px}select{min-width:120px}
         <div class="section-title">Kundendaten</div>
         <div class="form-row">
           <div class="form-field"><div class="form-label">Name / Vorname</div><input type="text" id="e-name" class="form-input" placeholder="Müller Hans"></div>
-          <div class="form-field"><div class="form-label">Produkt / Typ</div><input type="text" id="e-typ" class="form-input" placeholder="VE Pure, FA 666XB ..."></div>
+          <div class="form-field">
+            <div class="form-label">Produkt / Typ</div>
+            <input type="text" id="e-typ" class="form-input" placeholder="VE Pure, Müse, FA 666XB ..." oninput="autoDetectSupplier()">
+          </div>
         </div>
         <div class="form-row">
           <div class="form-field"><div class="form-label">E-Mail</div><input type="email" id="e-email" class="form-input" placeholder="kunde@email.ch"></div>
           <div class="form-field"><div class="form-label">Telefon</div><input type="tel" id="e-telefon" class="form-input" placeholder="+41 79 123 45 67"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-field" style="max-width:340px">
+            <div class="form-label">Lieferant</div>
+            <select id="e-lieferant" class="form-input">
+              <option value="">— bitte wählen —</option>
+              <option>Vision Ears</option>
+              <option>Fischer Amps</option>
+              <option>Custom Art</option>
+              <option>HEAROS</option>
+              <option>InEar</option>
+              <option>Ultimate Ears</option>
+              <option>RH Acustics</option>
+              <option>64 Audio</option>
+              <option>Soundz</option>
+              <option>P-EAR-S</option>
+              <option>Sonstige</option>
+            </select>
+            <div class="supplier-hint" id="supplier-hint"></div>
+          </div>
         </div>
         <div class="section-title">Kategorien</div>
         <div class="checks-grid">
@@ -298,7 +326,8 @@ input[type=text]{min-width:150px}select{min-width:120px}
 <script>
 const MONTHS=['','Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const SHEET_URL=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.sheetId}`;
-const HEADERS=['Jahr','Monat','Datum','Name','Produkt','Email','Telefon','Universal','Custom','GHS','Mulde','RepServ','Funk','Ambi','MusicLover','WVK','Ersatz'];
+// Neue Spaltenstruktur: +Lieferant als Spalte H (Index 7), Kategorien rücken eine Stelle
+const HEADERS=['Jahr','Monat','Datum','Name','Produkt','Email','Telefon','Lieferant','Universal','Custom','GHS','Mulde','RepServ','Funk','Ambi','MusicLover','WVK','Ersatz'];
 
 let data=[], accessToken=null, tokenClient=null;
 let statJahr=0, statMonat=0;
@@ -351,28 +380,29 @@ async function sheetsClear(range){
 
 async function ensureHeaders(){
   try{
-    const res=await sheetsGet(`${CONFIG.sheetName}!A1:Q1`);
-    if(!(res.values||[])[0]?.length) await sheetsUpdate(`${CONFIG.sheetName}!A1:Q1`,[HEADERS]);
+    const res=await sheetsGet(`${CONFIG.sheetName}!A1:R1`);
+    if(!(res.values||[])[0]?.length) await sheetsUpdate(`${CONFIG.sheetName}!A1:R1`,[HEADERS]);
   }catch(e){console.error(e);}
 }
 
 async function loadData(){
   setStatus('syncing','Lade Daten...');
   try{
-    const res=await sheetsGet(`${CONFIG.sheetName}!A2:Q100000`);
+    const res=await sheetsGet(`${CONFIG.sheetName}!A2:R100000`);
     const rows=res.values||[];
     data=rows.filter(r=>r[3]).map(r=>({
-      jahr:parseInt(r[0])||0,monat:parseInt(r[1])||0,datum:r[2]||'',
-      name:r[3]||'',typ:r[4]||'',email:r[5]||'',telefon:r[6]||'',
-      universal:parseFloat(r[7])||0,custom:parseFloat(r[8])||0,
-      ghs:parseFloat(r[9])||0,mulde:parseFloat(r[10])||0,
-      repserv:parseFloat(r[11])||0,funk:parseFloat(r[12])||0,
-      ambi:parseFloat(r[13])||0,musiklover:parseFloat(r[14])||0,
-      wvk:parseFloat(r[15])||0,ersatz:parseFloat(r[16])||0,
+      jahr:parseInt(r[0])||0, monat:parseInt(r[1])||0, datum:r[2]||'',
+      name:r[3]||'', typ:r[4]||'', email:r[5]||'', telefon:r[6]||'',
+      lieferant:r[7]||'',
+      universal:parseFloat(r[8])||0, custom:parseFloat(r[9])||0,
+      ghs:parseFloat(r[10])||0, mulde:parseFloat(r[11])||0,
+      repserv:parseFloat(r[12])||0, funk:parseFloat(r[13])||0,
+      ambi:parseFloat(r[14])||0, musiklover:parseFloat(r[15])||0,
+      wvk:parseFloat(r[16])||0, ersatz:parseFloat(r[17])||0,
     }));
     setStatus('connected','Google Sheets · '+data.length+' Einträge');
     populateYearFilters();
-    renderStat();renderTable();
+    renderStat(); renderTable();
   }catch(e){setStatus('error','Ladefehler');showToast('Fehler: '+e.message,true);}
 }
 
@@ -385,13 +415,16 @@ function populateYearFilters(){
 async function addEntry(){
   const name=document.getElementById('e-name').value.trim();
   if(!name){alert('Bitte Name eingeben');return;}
+  const lieferant=document.getElementById('e-lieferant').value;
+  if(!lieferant){alert('Bitte Lieferant auswählen');return;}
   const entry={
     jahr:+document.getElementById('e-jahr').value,
     monat:+document.getElementById('e-monat').value,
     datum:document.getElementById('e-datum').value,
-    name,typ:document.getElementById('e-typ').value.trim(),
+    name, typ:document.getElementById('e-typ').value.trim(),
     email:document.getElementById('e-email').value.trim(),
     telefon:document.getElementById('e-telefon').value.trim(),
+    lieferant,
     universal:document.getElementById('e-universal').checked?1:0,
     custom:document.getElementById('e-custom').checked?1:0,
     ghs:document.getElementById('e-ghs').checked?1:0,
@@ -404,27 +437,38 @@ async function addEntry(){
     ersatz:document.getElementById('e-ersatz').checked?1:0,
   };
   const btn=document.getElementById('save-btn');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Speichern...';
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Speichern...';
   setStatus('syncing','Speichere...');
   try{
-    await sheetsAppend([[entry.jahr,entry.monat,entry.datum,entry.name,entry.typ,entry.email,entry.telefon,
-      entry.universal,entry.custom,entry.ghs,entry.mulde,entry.repserv,entry.funk,entry.ambi,entry.musiklover,entry.wvk,entry.ersatz]]);
+    await sheetsAppend([[
+      entry.jahr,entry.monat,entry.datum,entry.name,entry.typ,
+      entry.email,entry.telefon,entry.lieferant,
+      entry.universal,entry.custom,entry.ghs,entry.mulde,
+      entry.repserv,entry.funk,entry.ambi,entry.musiklover,
+      entry.wvk,entry.ersatz
+    ]]);
     data.push(entry);
     setStatus('connected','Google Sheets · '+data.length+' Einträge');
     showToast('Gespeichert!');
-    document.getElementById('e-name').value='';document.getElementById('e-typ').value='';
-    document.getElementById('e-email').value='';document.getElementById('e-telefon').value='';
+    document.getElementById('e-name').value='';
+    document.getElementById('e-typ').value='';
+    document.getElementById('e-email').value='';
+    document.getElementById('e-telefon').value='';
+    document.getElementById('e-lieferant').value='';
+    document.getElementById('e-lieferant').classList.remove('supplier-auto');
+    document.getElementById('supplier-hint').textContent='';
     ['universal','custom','ghs','mulde','repserv','funk','ambi','musiklover','wvk','ersatz'].forEach(k=>{
-      document.getElementById('e-'+k).checked=false;document.getElementById('lbl-'+k).classList.remove('checked');
+      document.getElementById('e-'+k).checked=false;
+      document.getElementById('lbl-'+k).classList.remove('checked');
     });
     if(entry.email||entry.telefon){
       openNewsletter(entry);
     } else {
-      const msg=document.getElementById('e-msg');msg.classList.add('show');
+      const msg=document.getElementById('e-msg'); msg.classList.add('show');
       setTimeout(()=>msg.classList.remove('show'),2500);
     }
   }catch(e){setStatus('error','Fehler');showToast('Fehler: '+e.message,true);}
-  finally{btn.disabled=false;btn.innerHTML='Speichern';}
+  finally{btn.disabled=false; btn.innerHTML='Speichern';}
 }
 
 async function deleteRow(idx){
@@ -432,12 +476,74 @@ async function deleteRow(idx){
   data.splice(idx,1);
   setStatus('syncing','Aktualisiere...');
   try{
-    await sheetsClear(`${CONFIG.sheetName}!A2:Q100000`);
-    if(data.length>0) await sheetsUpdate(`${CONFIG.sheetName}!A2:Q${data.length+1}`,
-      data.map(r=>[r.jahr,r.monat,r.datum,r.name,r.typ,r.email,r.telefon,r.universal,r.custom,r.ghs,r.mulde,r.repserv,r.funk,r.ambi,r.musiklover,r.wvk,r.ersatz]));
+    await sheetsClear(`${CONFIG.sheetName}!A2:R100000`);
+    if(data.length>0) await sheetsUpdate(
+      `${CONFIG.sheetName}!A2:R${data.length+1}`,
+      data.map(r=>[r.jahr,r.monat,r.datum,r.name,r.typ,r.email,r.telefon,r.lieferant,
+        r.universal,r.custom,r.ghs,r.mulde,r.repserv,r.funk,r.ambi,r.musiklover,r.wvk,r.ersatz])
+    );
     setStatus('connected','Google Sheets · '+data.length+' Einträge');
-    showToast('Gelöscht');renderTable();renderStat();
+    showToast('Gelöscht'); renderTable(); renderStat();
   }catch(e){setStatus('error','Fehler');showToast('Fehler: '+e.message,true);}
+}
+
+// ── LIEFERANT ──
+// Auto-Erkennung (nur als Vorschlag beim Tippen, gespeicherter Wert hat Priorität)
+function getSupplierFromTyp(typ){
+  if(!typ)return '';
+  const t=typ.toUpperCase().replace(/\s+/g,'');
+  if(/^VE\d|^VEONE$|^VEPRO$|^VEPURE$|^VEZEN$|^VEXCON$|^VE8$|^VE5$|^VE2$|^VE7$|^VE4|^VE3|^GOLIVE$|^VE6/.test(t))return 'Vision Ears';
+  if(/^FA\d|^FA6|RAPTURE|^FA3$|^FA4/.test(t))return 'Fischer Amps';
+  if(/^FIBAE|^ACE$|^HYBRID/.test(t))return 'Custom Art';
+  if(/^H22|^H33|^H35|22MINI|^PP8$|^PMX$/.test(t))return 'HEAROS';
+  if(/^SD\d|^LIFEPRO|^LIVEPRO|^STREETLIFE/.test(t))return 'InEar';
+  if(/^UE\d|^UELIVE$|^UERR$|^3FORLIVE$/.test(t))return 'Ultimate Ears';
+  if(/^RH\d|^GO2ROCK$/.test(t))return 'RH Acustics';
+  if(/^A\d+[TS]$|^N8$|^FOURTE$/.test(t))return '64 Audio';
+  // Soundz: SH/AT Serie + alle bekannten Modelle
+  if(/^SH\d|^AT-\d|^SH-\d|^MUSE$|^MÜSE$|^DUNE$|^DÜNE$|^WAVE$|^BLADE$|^DREAM$|^FLAME$|^AVANT$/.test(t))return 'Soundz';
+  if(/^SIX$|^QUAD$|^PM[35]$/.test(t))return 'P-EAR-S';
+  return '';
+}
+
+function autoDetectSupplier(){
+  const typ=document.getElementById('e-typ').value.trim();
+  const detected=getSupplierFromTyp(typ);
+  const sel=document.getElementById('e-lieferant');
+  const hint=document.getElementById('supplier-hint');
+  // Nur vorschlagen wenn noch nichts manuell gewählt
+  if(detected){
+    sel.value=detected;
+    sel.classList.add('supplier-auto');
+    hint.textContent='✓ Automatisch erkannt – bitte prüfen';
+  } else if(!typ){
+    sel.classList.remove('supplier-auto');
+    hint.textContent='';
+  }
+}
+
+// Lieferant aus Datensatz: gespeicherter Wert hat Vorrang, sonst auto-erkennen
+function resolveSupplier(r){
+  if(r.lieferant && r.lieferant.trim()) return r.lieferant.trim();
+  return getSupplierFromTyp(r.typ) || 'Sonstige';
+}
+
+function getBadgeClass(s){
+  return{
+    'Vision Ears':'b-ve','Fischer Amps':'b-fa','Custom Art':'b-ca',
+    'HEAROS':'b-he','InEar':'b-ie','Ultimate Ears':'b-ue',
+    'RH Acustics':'b-rh','64 Audio':'b-64','Soundz':'b-sz','P-EAR-S':'b-pe'
+  }[s]||'b-other';
+}
+
+function getCats(r){
+  const c=[];
+  if(r.universal>0)c.push('Universal'); if(r.custom>0)c.push('Custom');
+  if(r.ghs>0)c.push('GHS'); if(r.mulde>0)c.push('Mulde');
+  if(r.repserv>0)c.push('Rep/Serv.'); if(r.funk>0)c.push('Funk');
+  if(r.ambi>0)c.push('Ambi'); if(r.musiklover>0)c.push('MusicLover');
+  if(r.wvk>0)c.push('WVK'); if(r.ersatz>0)c.push('Ersatz');
+  return c;
 }
 
 // ── NEWSLETTER ──
@@ -447,52 +553,27 @@ function openNewsletter(entry){
   const parts=entry.name.trim().split(' ');
   const nachname=parts[0];
   const vorname=parts.slice(1).join(' ')||parts[0];
-  setNlField('nl-vorname', vorname);
-  setNlField('nl-nachname', nachname);
-  setNlField('nl-email', entry.email||'');
-  setNlField('nl-tel', entry.telefon||'');
+  setNlField('nl-vorname',vorname); setNlField('nl-nachname',nachname);
+  setNlField('nl-email',entry.email||''); setNlField('nl-tel',entry.telefon||'');
   const missing=!entry.email||!entry.telefon;
   document.getElementById('nl-missing').style.display=missing?'block':'none';
   document.getElementById('newsletter-popup').style.display='flex';
 }
-function setNlField(id, val){
+function setNlField(id,val){
   const el=document.getElementById(id);
-  el.textContent=val||'—';
-  el.dataset.val=val||'';
-  el.classList.remove('copied');
+  el.textContent=val||'—'; el.dataset.val=val||''; el.classList.remove('copied');
 }
 function copyField(id){
-  const el=document.getElementById(id);
-  const val=el.dataset.val;
-  if(!val||val==='')return;
+  const el=document.getElementById(id); const val=el.dataset.val;
+  if(!val)return;
   navigator.clipboard.writeText(val).then(()=>{
-    el.classList.add('copied');
-    el.textContent='✓ Kopiert: '+val;
+    el.classList.add('copied'); el.textContent='✓ Kopiert: '+val;
     setTimeout(()=>{el.classList.remove('copied');el.textContent=val;},2000);
   });
 }
 function closeNewsletter(){document.getElementById('newsletter-popup').style.display='none';}
 function openEarlineForm(){window.open(CONFIG.newsletterUrl,'_blank');}
 function openNewsletterFromTable(idx){openNewsletter(data[idx]);}
-
-// ── LIEFERANT ──
-function getSupplier(typ){
-  if(!typ)return 'Sonstige';
-  const t=typ.toUpperCase().replace(/\s+/g,'');
-  if(/^VE\d|^VEONE$|^VEPRO$|^VEPURE$|^VEZEN$|^VEXCON$|^VE8$|^VE5$|^VE2$|^VE7$|^VE4|^VE3|^GOLIVE$|^VE6/.test(t))return 'Vision Ears';
-  if(/^FA\d|^FA6|RAPTURE|^FA3$|^FA4/.test(t))return 'Fischer Amps';
-  if(/^FIBAE|^ACE$|^HYBRID/.test(t))return 'Custom Art';
-  if(/^H22|^H33|^H35|22MINI|^PP8$|^PMX$|^MUSE$|^MÜSE$|^DUNE$|^DÜNE$|^WAVE$|^BLADE$|^FLAME$/.test(t))return 'HEAROS';
-  if(/^SD\d|^LIFEPRO|^LIVEPRO|^STREETLIFE/.test(t))return 'InEar';
-  if(/^UE\d|^UELIVE$|^UERR$|^3FORLIVE$/.test(t))return 'Ultimate Ears';
-  if(/^RH\d|^GO2ROCK$/.test(t))return 'RH Acustics';
-  if(/^A\d+[TS]$|^N8$|^FOURTE$/.test(t))return '64 Audio';
-  if(/^SH\d|^AT-\d|^SH-\d/.test(t))return 'Soundz';
-  if(/^SIX$|^QUAD$|^PM[35]$/.test(t))return 'P-EAR-S';
-  return 'Sonstige';
-}
-function getBadgeClass(s){return{'Vision Ears':'b-ve','Fischer Amps':'b-fa','Custom Art':'b-ca','HEAROS':'b-he','InEar':'b-ie','Ultimate Ears':'b-ue','RH Acustics':'b-rh','64 Audio':'b-64'}[s]||'b-other';}
-function getCats(r){const c=[];if(r.universal>0)c.push('Universal');if(r.custom>0)c.push('Custom');if(r.ghs>0)c.push('GHS');if(r.mulde>0)c.push('Mulde');if(r.repserv>0)c.push('Rep/Serv.');if(r.funk>0)c.push('Funk');if(r.ambi>0)c.push('Ambi');if(r.musiklover>0)c.push('MusicLover');if(r.wvk>0)c.push('WVK');if(r.ersatz>0)c.push('Ersatz');return c;}
 
 // ── STATISTIK ──
 function renderStat(){
@@ -507,7 +588,7 @@ function renderStat(){
     months.map(m=>`<div class="mpill ${statMonat===m?'active':''}" onclick="setStatM(${m})">${MONTHS[m]}</div>`).join('');
   const d=statMonat===0?yearData:yearData.filter(r=>r.monat===statMonat);
 
-  const iem = d.filter(r => r.typ && r.typ.trim() !== '').length;
+  const iem=d.filter(r=>r.typ&&r.typ.trim()!=='').length;
   const ghs=d.reduce((s,r)=>s+(r.ghs||0),0);
   const rep=d.reduce((s,r)=>s+(r.repserv||0),0);
   const fmt=v=>v%1===0?v:v.toFixed(1);
@@ -517,15 +598,22 @@ function renderStat(){
     <div class="metric-card"><div class="metric-label">GHS</div><div class="metric-value">${fmt(ghs)}</div></div>
     <div class="metric-card"><div class="metric-label">Rep / Serv.</div><div class="metric-value">${rep}</div></div>`;
 
-  const pc={};d.forEach(r=>{if(r.typ?.trim()){const k=r.typ.trim();pc[k]=(pc[k]||0)+1;}});
-  const prods=Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  // Alle Produkte – kein Limit
+  const pc={};
+  d.forEach(r=>{if(r.typ?.trim()){const k=r.typ.trim();pc[k]=(pc[k]||0)+1;}});
+  const prods=Object.entries(pc).sort((a,b)=>b[1]-a[1]);
   const maxP=prods[0]?prods[0][1]:1;
-  document.getElementById('chart-products').innerHTML=prods.length?prods.map(([p,c])=>`<div class="bar-row"><div class="bar-label" title="${p}">${p}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/maxP*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join(''):'<div class="empty-state">Keine Daten</div>';
+  document.getElementById('chart-products').innerHTML=prods.length
+    ? prods.map(([p,c])=>`<div class="bar-row"><div class="bar-label" title="${p}">${p}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/maxP*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join('')
+    : '<div class="empty-state">Keine Daten</div>';
 
-  const sc={};d.forEach(r=>{const s=getSupplier(r.typ);sc[s]=(sc[s]||0)+1;});
+  // Lieferanten
+  const sc={};
+  d.forEach(r=>{const s=resolveSupplier(r);sc[s]=(sc[s]||0)+1;});
   const sups=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
   const maxS=sups[0]?sups[0][1]:1;
-  document.getElementById('chart-suppliers').innerHTML=sups.map(([s,c])=>`<div class="bar-row"><div class="bar-label" title="${s}">${s}</div><div class="bar-track"><div class="bar-fill blue" style="width:${Math.round(c/maxS*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join('');
+  document.getElementById('chart-suppliers').innerHTML=sups.map(([s,c])=>`
+    <div class="bar-row"><div class="bar-label" title="${s}">${s}</div><div class="bar-track"><div class="bar-fill blue" style="width:${Math.round(c/maxS*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join('');
 }
 function setStatJahr(j){statJahr=j;statMonat=0;renderStat();}
 function setStatM(m){statMonat=m;renderStat();}
@@ -536,12 +624,14 @@ function getFiltered(){
   const n=(document.getElementById('f-name').value||'').toLowerCase();
   const p=(document.getElementById('f-prod').value||'').toLowerCase();
   const m=document.getElementById('f-monat').value;
+  const l=document.getElementById('f-lief').value;
   const k=document.getElementById('f-kat').value;
   return data.filter(r=>{
     if(j&&r.jahr!=j)return false;
     if(n&&!r.name.toLowerCase().includes(n))return false;
     if(p&&!r.typ.toLowerCase().includes(p))return false;
     if(m&&r.monat!=m)return false;
+    if(l&&resolveSupplier(r)!==l)return false;
     if(k){
       const km={Custom:'custom',Universal:'universal',GHS:'ghs',RepServ:'repserv',MusicLover:'musiklover',WVK:'wvk',Ersatz:'ersatz'};
       if(!(r[km[k]]>0))return false;
@@ -549,13 +639,14 @@ function getFiltered(){
     return true;
   });
 }
+
 function renderTable(){
   const rows=getFiltered();
   document.getElementById('result-count').textContent=rows.length+' Einträge';
   const tb=document.getElementById('table-body');
   if(!rows.length){tb.innerHTML='<tr><td colspan="8"><div class="empty-state">Keine Einträge gefunden</div></td></tr>';return;}
   tb.innerHTML=rows.map(r=>{
-    const sup=getSupplier(r.typ);
+    const sup=resolveSupplier(r);
     const cats=getCats(r).map(c=>`<span class="cat-tag">${c}</span>`).join('');
     const idx=data.indexOf(r);
     const hasContact=r.email||r.telefon;
@@ -571,9 +662,10 @@ function renderTable(){
     </tr>`;
   }).join('');
 }
+
 function clearFilters(){
   ['f-name','f-prod'].forEach(id=>document.getElementById(id).value='');
-  ['f-jahr','f-monat','f-kat'].forEach(id=>document.getElementById(id).value='');
+  ['f-jahr','f-monat','f-kat','f-lief'].forEach(id=>document.getElementById(id).value='');
   renderTable();
 }
 
@@ -581,7 +673,7 @@ function clearFilters(){
 function showPane(id,btn){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('pane-'+id).classList.add('active');btn.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active'); btn.classList.add('active');
   if(id==='statistik')renderStat();
   if(id==='suche')renderTable();
 }

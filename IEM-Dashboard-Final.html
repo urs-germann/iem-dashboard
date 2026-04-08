@@ -23,8 +23,6 @@ const CONFIG={
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
-
-/* HEADER */
 .header{background:var(--text);color:white;padding:0 28px;height:52px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100}
 .logo{font-size:16px;font-weight:600;letter-spacing:-.3px;font-family:'IBM Plex Mono',monospace}
 .logo span{opacity:.5;font-weight:400}
@@ -32,18 +30,12 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tex
 .nav-btn{padding:6px 16px;background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;border-radius:5px;transition:all .15s}
 .nav-btn:hover{color:white;background:rgba(255,255,255,.1)}
 .nav-btn.active{color:white;background:rgba(255,255,255,.18)}
-
-/* LAYOUT */
 .page{display:none;padding:24px 28px;max-width:1120px;margin:0 auto}
 .page.active{display:block}
-
-/* STAT GRID */
 .stat-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
 .filter-pill{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;font-family:'IBM Plex Mono',monospace}
 .filter-pill:hover{border-color:var(--text3)}
 .filter-pill.active{background:var(--text);color:white;border-color:var(--text)}
-.divider{width:1px;height:20px;background:var(--border);margin:0 4px}
-
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
 .kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px}
@@ -51,7 +43,6 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tex
 .kpi.green .kpi-value{color:var(--green)}
 .kpi.orange .kpi-value{color:var(--orange)}
 .kpi.blue .kpi-value{color:var(--blue)}
-
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:700px){.charts-grid{grid-template-columns:1fr}}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
@@ -61,10 +52,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tex
 .bar-track{flex:1;height:7px;background:var(--surface2);border-radius:4px;overflow:hidden}
 .bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s ease}
 .bar-fill.blue{background:var(--blue)}
-.bar-fill.orange{background:var(--orange)}
 .bar-num{min-width:26px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3)}
-
-/* MONTH TABLE */
 .month-table-wrap{margin-bottom:20px}
 .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text2);margin-bottom:10px}
 .tbl{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);font-size:12px}
@@ -75,8 +63,6 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tex
 .tbl td.num{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--text2)}
 .tbl td.num.highlight{color:var(--green);font-weight:600}
 .tbl tr:hover:not(.total-row) td{background:var(--surface2)}
-
-/* SEARCH PAGE */
 .filter-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px;box-shadow:var(--shadow)}
 .ff{display:flex;flex-direction:column;gap:4px}
 .ff-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
@@ -95,13 +81,8 @@ input[type=text]{min-width:140px}select{min-width:130px}
 .b-sz{background:#f0e8ff;color:#3a0a6e}.b-vp{background:#e8fff5;color:#0a4a3a}
 .b-rep{background:var(--surface2);color:var(--text2)}.b-other{background:var(--surface2);color:var(--text2)}
 .cat-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:500;background:var(--surface2);color:var(--text2);border:1px solid var(--border);margin-right:2px;margin-bottom:2px}
-
-/* COPY BUTTON */
 .copy-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:11px;cursor:pointer;color:var(--text3);transition:all .15s;font-family:inherit}
 .copy-btn:hover{border-color:var(--green);color:var(--green)}
-.copy-btn.copied{border-color:var(--green);color:var(--green);background:var(--green-light)}
-
-/* ENTRY FORM */
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:700px;box-shadow:var(--shadow)}
 .form-section{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .form-section:first-child{margin-top:0}
@@ -111,20 +92,15 @@ input[type=text]{min-width:140px}select{min-width:130px}
 .form-input{width:100%;padding:9px 12px;min-width:unset;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:border .15s}
 .form-input:focus{border-color:var(--text3);background:white}
 input[type=date].form-input{min-width:unset}
-
 .cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:20px}
 .cat-check{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;user-select:none}
 .cat-check:hover{border-color:var(--text3);color:var(--text)}
 .cat-check.on{background:var(--green-light);border-color:#7dc48a;color:var(--green);font-weight:500}
 .cat-check input{display:none}
-
 .btn-primary{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;background:var(--text);color:white;border:none;border-radius:6px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
 .btn-primary:hover{opacity:.85}
-.btn-primary:disabled{opacity:.35;cursor:not-allowed}
 .save-note{font-size:12px;color:var(--green);font-weight:500;margin-left:10px;opacity:0;transition:opacity .3s}
 .save-note.show{opacity:1}
-
-/* NEWSLETTER PANEL (inline) */
 .nl-panel{background:var(--green-light);border:1px solid #7dc48a;border-radius:var(--radius);padding:18px;margin-top:16px;display:none}
 .nl-panel.show{display:block}
 .nl-panel h4{font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px}
@@ -134,26 +110,12 @@ input[type=date].form-input{min-width:unset}
 .nl-field.cp{border-color:var(--green);background:#dcf0e0}
 .nl-field-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-bottom:2px}
 .nl-field-val{font-size:13px;color:var(--text);font-family:'IBM Plex Mono',monospace}
-.nl-hint{font-size:11px;color:var(--text2);margin-top:8px}
 .btn-link{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:var(--green);color:white;border:none;border-radius:5px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;text-decoration:none;transition:opacity .15s}
 .btn-link:hover{opacity:.85}
-
-/* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:white;padding:11px 18px;border-radius:6px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.err{background:var(--red)}
-
 .empty{text-align:center;padding:32px;color:var(--text3);font-size:13px}
-.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* LOGIN */
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px 48px;text-align:center;max-width:380px;box-shadow:var(--shadow)}
-.login-card h2{font-size:20px;font-weight:600;margin-bottom:8px}
-.login-card p{color:var(--text2);font-size:13px;line-height:1.6;margin-bottom:24px}
-.google-btn{display:inline-flex;align-items:center;gap:12px;padding:11px 24px;background:white;color:#3c4043;border:1px solid #dadce0;border-radius:6px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.google-btn:hover{box-shadow:0 2px 6px rgba(0,0,0,.15);background:#f8f9fa}
 .status-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0}
 .status-dot.ok{background:#4ade80}
 .status-dot.sync{background:#fbbf24;animation:pulse 1s infinite}
@@ -162,7 +124,6 @@ input[type=date].form-input{min-width:unset}
 </head>
 <body>
 <div id="toast" class="toast"></div>
-
 <div id="app">
 <header class="header">
   <div class="logo">IEM <span>Dashboard 2026</span></div>
@@ -177,31 +138,20 @@ input[type=date].form-input{min-width:unset}
   </nav>
 </header>
 
-<!-- ═══ STATISTIK ═══ -->
 <div id="page-statistik" class="page active">
   <div class="stat-filters" id="stat-year-bar"></div>
   <div class="stat-filters" id="stat-month-bar" style="margin-top:-8px"></div>
-
   <div class="kpi-row" id="kpi-row"></div>
-
   <div class="month-table-wrap" id="month-table-section">
     <div class="section-label">Monatsübersicht</div>
     <div class="tbl-scroll"><table class="tbl" id="month-table"></table></div>
   </div>
-
   <div class="charts-grid">
-    <div class="chart-card">
-      <div class="chart-title">Lieferanten</div>
-      <div id="chart-supplier"></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Produkte (Top 20)</div>
-      <div id="chart-product"></div>
-    </div>
+    <div class="chart-card"><div class="chart-title">Lieferanten</div><div id="chart-supplier"></div></div>
+    <div class="chart-card"><div class="chart-title">Produkte (Top 20)</div><div id="chart-product"></div></div>
   </div>
 </div>
 
-<!-- ═══ SUCHE ═══ -->
 <div id="page-suche" class="page">
   <div class="filter-bar">
     <div class="ff"><div class="ff-label">Monat</div>
@@ -238,16 +188,12 @@ input[type=date].form-input{min-width:unset}
   <div class="result-info" id="result-info"></div>
   <div class="tbl-scroll">
     <table class="tbl">
-      <thead><tr>
-        <th>Monat</th><th>Datum</th><th>Name</th><th>Produkt</th><th>Lieferant</th>
-        <th>Kategorien</th><th>Newsletter</th>
-      </tr></thead>
+      <thead><tr><th>Monat</th><th>Datum</th><th>Name</th><th>Produkt</th><th>Lieferant</th><th>Kategorien</th><th>Newsletter</th></tr></thead>
       <tbody id="search-body"></tbody>
     </table>
   </div>
 </div>
 
-<!-- ═══ EINGABE ═══ -->
 <div id="page-eingabe" class="page">
   <div class="form-card">
     <div class="form-section">Zeitangabe</div>
@@ -266,27 +212,14 @@ input[type=date].form-input{min-width:unset}
         <input type="date" id="e-datum" class="form-input">
       </div>
     </div>
-
     <div class="form-section">Kundendaten</div>
     <div class="form-row">
-      <div class="form-field">
-        <div class="form-label">Name / Vorname</div>
-        <input type="text" id="e-name" class="form-input" placeholder="Müller Hans">
-      </div>
-      <div class="form-field">
-        <div class="form-label">Produkt / Typ</div>
-        <input type="text" id="e-typ" class="form-input" placeholder="VE Pure, ACE, GoLive…" oninput="autoSupplier()">
-      </div>
+      <div class="form-field"><div class="form-label">Name / Vorname</div><input type="text" id="e-name" class="form-input" placeholder="Müller Hans"></div>
+      <div class="form-field"><div class="form-label">Produkt / Typ</div><input type="text" id="e-typ" class="form-input" placeholder="VE Pure, ACE, GoLive…" oninput="autoSupplier()"></div>
     </div>
     <div class="form-row">
-      <div class="form-field">
-        <div class="form-label">E-Mail <span style="color:var(--text3);font-weight:400">(für Newsletter)</span></div>
-        <input type="email" id="e-email" class="form-input" placeholder="name@email.ch">
-      </div>
-      <div class="form-field">
-        <div class="form-label">Telefon <span style="color:var(--text3);font-weight:400">(für Newsletter)</span></div>
-        <input type="tel" id="e-tel" class="form-input" placeholder="+41 79 123 45 67">
-      </div>
+      <div class="form-field"><div class="form-label">E-Mail <span style="color:var(--text3);font-weight:400">(für Newsletter)</span></div><input type="email" id="e-email" class="form-input" placeholder="name@email.ch"></div>
+      <div class="form-field"><div class="form-label">Telefon <span style="color:var(--text3);font-weight:400">(für Newsletter)</span></div><input type="tel" id="e-tel" class="form-input" placeholder="+41 79 123 45 67"></div>
     </div>
     <div class="form-row">
       <div class="form-field" style="max-width:300px">
@@ -301,7 +234,6 @@ input[type=date].form-input{min-width:unset}
         <div id="e-lief-hint" style="font-size:11px;color:var(--green);margin-top:3px;min-height:15px;font-style:italic"></div>
       </div>
     </div>
-
     <div class="form-section">Kategorien</div>
     <div class="cats-grid">
       <label class="cat-check" id="lbl-custom" onclick="toggleCat(this,'e-custom')"><input type="checkbox" id="e-custom"> Custom</label>
@@ -315,204 +247,177 @@ input[type=date].form-input{min-width:unset}
       <label class="cat-check" id="lbl-wvk" onclick="toggleCat(this,'e-wvk')"><input type="checkbox" id="e-wvk"> WVK</label>
       <label class="cat-check" id="lbl-ersatz" onclick="toggleCat(this,'e-ersatz')"><input type="checkbox" id="e-ersatz"> Ersatz</label>
     </div>
-
     <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">
       <button class="btn-primary" id="save-btn" onclick="saveEntry()">Speichern</button>
-      <span class="save-note" id="save-note">✓ Gespeichert</span>
+      <span class="save-note" id="save-note">&#10003; Gespeichert</span>
     </div>
-
-    <!-- Newsletter inline panel -->
     <div class="nl-panel" id="nl-panel">
-      <h4>📋 Kundendaten für Newsletter – klicke zum Kopieren</h4>
+      <h4>&#128203; Kundendaten für Newsletter – klicke zum Kopieren</h4>
       <div class="nl-fields">
-        <div class="nl-field" id="nl-vorname" onclick="copyNL('nl-vorname')">
-          <div class="nl-field-label">Vorname</div>
-          <div class="nl-field-val" id="nl-vorname-v">—</div>
-        </div>
-        <div class="nl-field" id="nl-nachname" onclick="copyNL('nl-nachname')">
-          <div class="nl-field-label">Nachname</div>
-          <div class="nl-field-val" id="nl-nachname-v">—</div>
-        </div>
-        <div class="nl-field" id="nl-email" onclick="copyNL('nl-email')">
-          <div class="nl-field-label">E-Mail</div>
-          <div class="nl-field-val" id="nl-email-v">—</div>
-        </div>
-        <div class="nl-field" id="nl-tel" onclick="copyNL('nl-tel')">
-          <div class="nl-field-label">Telefon</div>
-          <div class="nl-field-val" id="nl-tel-v">—</div>
-        </div>
+        <div class="nl-field" id="nl-vorname" onclick="copyNL('nl-vorname')"><div class="nl-field-label">Vorname</div><div class="nl-field-val" id="nl-vorname-v">—</div></div>
+        <div class="nl-field" id="nl-nachname" onclick="copyNL('nl-nachname')"><div class="nl-field-label">Nachname</div><div class="nl-field-val" id="nl-nachname-v">—</div></div>
+        <div class="nl-field" id="nl-email" onclick="copyNL('nl-email')"><div class="nl-field-label">E-Mail</div><div class="nl-field-val" id="nl-email-v">—</div></div>
+        <div class="nl-field" id="nl-tel" onclick="copyNL('nl-tel')"><div class="nl-field-label">Telefon</div><div class="nl-field-val" id="nl-tel-v">—</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <a href="https://www.newleads.ch/earline/" target="_blank" class="btn-link">🔗 Earline-Formular öffnen</a>
-        <div class="nl-hint" id="nl-warn" style="color:var(--orange);display:none">⚠ E-Mail oder Telefon fehlt – bitte direkt eingeben.</div>
+        <a href="https://www.newleads.ch/earline/" target="_blank" class="btn-link">&#128279; Earline-Formular öffnen</a>
+        <div id="nl-warn" style="font-size:11px;color:var(--orange);display:none">&#9888; E-Mail oder Telefon fehlt – bitte direkt eingeben.</div>
       </div>
     </div>
   </div>
 </div>
-</div><!-- end #app -->
+</div>
 
-<script src="https://accounts.google.com/gsi/client" async></script>
 <script>
-// ── APPS SCRIPT API (kein Login nötig) ──
-async function loadSheetData(){
-  setStatus('sync','Verbinde mit Sheets…');
-  try{
-    const res=await fetch(CONFIG.scriptUrl+'?callback=_cb', {mode:'no-cors'});
-    // no-cors kann keine Antwort lesen – nutze JSONP stattdessen
-    loadSheetDataJSONP();
-  }catch(e){
-    loadSheetDataJSONP();
-  }
+// ══════════════════════════════════════════════════════════════
+// GOOGLE SHEETS VERBINDUNG – JSONP (kompatibel mit deinem Apps Script)
+// ══════════════════════════════════════════════════════════════
+
+function parseSheetRows(rows) {
+  return rows.slice(1).filter(r => r[2]).map(r => ({
+    Monat: parseInt(r[0]) || 0,
+    Datum: String(r[1] || ''),
+    Name: String(r[2] || ''),
+    Typ: String(r[3] || ''),
+    Marke: String(r[4] || ''),
+    email: String(r[5] || ''),
+    tel: String(r[6] || ''),
+    'Univeral': parseFloat(r[7]) || 0,
+    'Custom': parseFloat(r[8]) || 0,
+    'GHS': parseFloat(r[9]) || 0,
+    'Mulde': parseFloat(r[10]) || 0,
+    'Rep/Serv.': parseFloat(r[11]) || 0,
+    'Funk': parseFloat(r[12]) || 0,
+    'Ambi': parseFloat(r[13]) || 0,
+    'MusikLover': parseFloat(r[14]) || 0,
+    'WVK': parseFloat(r[15]) || 0,
+    'Ersatz': parseFloat(r[16]) || 0,
+  })).filter(r => r.Monat > 0);
 }
 
-function loadSheetDataJSONP(){
-  window._cb=function(rows){
-    const dataRows=rows.slice(1).filter(r=>r[2]);
-    const sheetEntries=dataRows.map(r=>({
-      Monat:parseInt(r[0])||0,Datum:String(r[1]||''),Name:String(r[2]||''),
-      Typ:String(r[3]||''),Marke:String(r[4]||''),
-      email:String(r[5]||''),tel:String(r[6]||''),
-      'Univeral':parseFloat(r[7])||0,'Custom':parseFloat(r[8])||0,'GHS':parseFloat(r[9])||0,
-      'Mulde':parseFloat(r[10])||0,'Rep/Serv.':parseFloat(r[11])||0,'Funk':parseFloat(r[12])||0,
-      'Ambi':parseFloat(r[13])||0,'MusikLover':parseFloat(r[14])||0,'WVK':parseFloat(r[15])||0,'Ersatz':parseFloat(r[16])||0,
-    })).filter(r=>r.Monat>0);
-    const existing=new Set(DATA.map(r=>r.Name+'|'+r.Datum));
-    let neu=0;
-    sheetEntries.forEach(r=>{if(!existing.has(r.Name+'|'+r.Datum)){DATA.push(r);neu++;}});
-    if(neu>0){renderStat();renderSearch();}
-    setStatus('ok',`Sheets verbunden · ${sheetEntries.length} Einträge`);
-  };
-  const s=document.createElement('script');
-  s.src=CONFIG.scriptUrl+'?callback=_cb';
-  s.onerror=()=>setStatus('','Sheets nicht erreichbar – lokale Daten aktiv');
+function onSheetData(rows) {
+  const sheetEntries = parseSheetRows(rows);
+  const existing = new Set(DATA.map(r => r.Name + '|' + r.Datum));
+  let neu = 0;
+  sheetEntries.forEach(r => {
+    if (!existing.has(r.Name + '|' + r.Datum)) { DATA.push(r); neu++; }
+  });
+  if (neu > 0) { renderStat(); renderSearch(); }
+  setStatus('ok', 'Sheets verbunden · ' + sheetEntries.length + ' Einträge');
+}
+
+function loadSheetData() {
+  setStatus('sync', 'Verbinde mit Sheets…');
+  // Altes Script-Tag entfernen falls vorhanden
+  const old = document.getElementById('jsonp-script');
+  if (old) old.remove();
+
+  const s = document.createElement('script');
+  s.id = 'jsonp-script';
+  s.src = CONFIG.scriptUrl + '?callback=onSheetData&t=' + Date.now();
+  s.onerror = () => setStatus('', 'Sheets nicht erreichbar – lokale Daten aktiv');
   document.head.appendChild(s);
 }
 
-async function saveToSheet(entry){
-  try{
-    await fetch(CONFIG.scriptUrl,{
-      method:'POST',
-      body:JSON.stringify([
-        entry.Monat,entry.Datum,entry.Name,entry.Typ,entry.Marke,
-        entry.email||'',entry.tel||'',
-        entry['Univeral'],entry['Custom'],entry['GHS'],entry['Mulde'],
-        entry['Rep/Serv.'],entry['Funk'],entry['Ambi'],entry['MusikLover'],entry['WVK'],entry['Ersatz']
+async function saveToSheet(entry) {
+  try {
+    setStatus('sync', 'Speichere in Sheets…');
+    const res = await fetch(CONFIG.scriptUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify([
+        entry.Monat, entry.Datum, entry.Name, entry.Typ, entry.Marke,
+        entry.email || '', entry.tel || '',
+        entry['Univeral'], entry['Custom'], entry['GHS'], entry['Mulde'],
+        entry['Rep/Serv.'], entry['Funk'], entry['Ambi'], entry['MusikLover'],
+        entry['WVK'], entry['Ersatz']
       ])
     });
-    setStatus('ok','Gespeichert in Sheets');
-  }catch(e){
-    setStatus('','Sheets-Fehler');
-    showToast('Sheets-Fehler: '+e.message,true);
+    setStatus('ok', 'Gespeichert in Sheets');
+  } catch (e) {
+    setStatus('', 'Lokal gespeichert – Sheets offline');
   }
 }
 
-function setStatus(state,text){
-  const d=document.getElementById('status-dot');
-  d.className='status-dot'+(state?' '+state:'');
-  document.getElementById('status-text').textContent=text;
+function setStatus(state, text) {
+  const d = document.getElementById('status-dot');
+  d.className = 'status-dot' + (state ? ' ' + state : '');
+  document.getElementById('status-text').textContent = text;
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-  const now=new Date();
-  document.getElementById('e-datum').value=now.toISOString().split('T')[0];
-  document.getElementById('e-monat').value=now.getMonth()+1;
+window.addEventListener('DOMContentLoaded', () => {
+  const now = new Date();
+  document.getElementById('e-datum').value = now.toISOString().split('T')[0];
+  document.getElementById('e-monat').value = now.getMonth() + 1;
   renderStat();
   renderSearch();
   loadSheetData();
 });
+
 // ══════════════════════════════════════════════════════════════
 // DATA – embedded from IEM-Umsatz_2026.xlsx
 // ══════════════════════════════════════════════════════════════
-let DATA = [{"Monat":1,"Datum":"2026-01-05","Name":"Knecht Davis","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2025-01-12","Name":"Furler Denise","Typ":"VE3.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Tescari Luca","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2025-01-12","Name":"Baumgartner David","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Kiefer Linda","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Killenberger Collin","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Zehnder Philipp","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Sonderegger Anthony","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Boner Christoph","Typ":"Muse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-12","Name":"Bopp Andreas","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-13","Name":"Jud Manuel","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-13","Name":"Nigro Alissa","Typ":"UE6+","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-14","Name":"Meier Fabio","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-14","Name":"Affolter Heinz","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Zwiauer Wolfgang","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Zwahlen Nadja","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Sager Heinz","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Seiler Luca","Typ":"UE7","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Weger Luca","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Häni der Letzte Schrei","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Felber Stephan","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Zeller Beat","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Mettler Trudi","Typ":"35","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-19","Name":"Strittmatter Armin","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-19","Name":"Schlegel Michael","Typ":"FA 666 ","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2026-01-22","Name":"Wendy Pacini   Tardy","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Bellon Alexandra Tardy","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Larrouturou Jeanne","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Briset Anne","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-26","Name":"Schneider Thomas","Typ":"VE XCon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-26","Name":"Sievers David","Typ":"VE XCon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2026-01-26","Name":"Schönenberger Ralph","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Mötz Andi","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Hassler Aurel","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Born Volker","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":1,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Altorfer Theo","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Aklin Beat","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Marin Jan","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Kalt Martin","Typ":"Müse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Kalt Anja","Typ":"Müse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Schwab Businger Denise","Typ":"35","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Urfer Peter","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Businger Steve","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Luginbuehl Rolf","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Rettenmund Victor","Typ":"Avant","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Wyttenbach Daniel","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Schenk Mathias","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Schläppi Thomas","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-03","Name":"Renggli Andreas","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-03","Name":"Bleuler Ueli","Typ":"VE8","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-03","Name":"Knörle Ketty","Typ":"Müse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-10","Name":"Kunzmann David Tardy","Typ":"A4s","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-11","Name":"Hermanek Robin","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Benz Urs","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Kasper-Rölli Sabine","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Riedel Janis","Typ":"Wave","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-13","Name":"Stalder Pascal StudioSound","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-16","Name":"Leutenegger Dominic","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-16","Name":"Durrer Daniel","Typ":"33","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-18","Name":"Urbanczik Yannick","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-18","Name":"Andrekson Andres | Stress","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-18","Name":"Obrist Greg","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1.5,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-06-19","Name":"Chesham Kevin","Typ":"UE6+","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Bühlmann Simon","Typ":"FA 666 XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Bühlmann Lukas","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Forrer Adrian","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-23","Name":"Roth Florian","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-25","Name":"StudioSound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-26","Name":"Gfeller Stee","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-26","Name":"Gfeller Stee","Typ":"VE8","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-26","Name":"Baier Rafael","Typ":"FIBAE 7","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-27","Name":"Tardy Laurent","Typ":"GoLive","Marke":"Vision Ears","Univeral":2,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":2,"Ersatz":0},{"Monat":2,"Datum":"2026-02-27","Name":"Rosset Dave","Typ":"Wave","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-28","Name":"Moine Sebastian","Typ":"VE Zen","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":2,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Siegfried Louis","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Horber Tabea","Typ":"Müse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Roider Raphael","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Zumbühl Michael","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Schäfer Mike","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Blösch Dennis","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Künzli Tobias","Typ":"33","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-05","Name":"Mytheninformatik","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":1,"WVK":1,"Ersatz":0},{"Monat":3,"Datum":"2026-03-11","Name":"Bolliger Thomas","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-13","Name":"Gegliardi Claudio","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Richard Pascal","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":2,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Oertig Marina","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-13","Name":"Hitz Andri","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Knüsel Tim","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Bürgin Sven","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-16","Name":"Winkler Naïma","Typ":"FIBAE 7","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Metanoia","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Chételat Jeremy","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-17","Name":"Limani Yll","Typ":"RH6","Marke":"RH Acustics","Univeral":0,"Custom":2,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":2},{"Monat":3,"Datum":"2026-03-18","Name":"Brügger Sven","Typ":"Müse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Bircher Mattia","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-06-18","Name":"Wettstein Andreas","Typ":"VE 3.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-06-18","Name":"Lanz Corrodo","Typ":"PM5","Marke":"Variphone","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Inniger Dina","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Prabakaran Gabriel","Typ":"Dream ","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Hofmann René","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Vello Leon","Typ":"FIBAE 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Ullmann Igor","Typ":"N8","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-18","Name":"Schuler Christian","Typ":"UE18","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-20","Name":"Péléeraux Zoé Eli","Typ":"A4s","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-20","Name":"Keller André","Typ":"N8","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-23","Name":"Lüscher Musik Daniel","Typ":"GoLive","Marke":"Vision Ears","Univeral":2,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":2,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Pfändler Dave","Typ":"VE2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Enkerli Jonas","Typ":"VE4.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Nöth Michael","Typ":"VE Zen","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-23","Name":"Widmer Sound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Sturny Laura","Typ":"VE5","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Vogelsang Ewald","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Köstinger Fabian","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Waldburger Marcel","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Riedel Janis","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Hendriksen Alex","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-25","Name":"Götz Benjamin","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-25","Name":"Ngarambe Yannick","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":1,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Käufeler Chris","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Baschi","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Tamas Michael","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Weissmann Nicolas","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Gutweniger Daniel","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Dean Mike","Typ":"FA 3E","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Zwicky Jana","Typ":"FA666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Mäntisaari Teemu","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-30","Name":"Fröhlich Rafael","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Dürrenberger Markus","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":0.5,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Salathe Martin","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":0.5,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Hösle Micha","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Moreno Anthony","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Müller Beat","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Piccany Benoit","Typ":"VE Xcon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Gafner Stefan","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Widmer Sound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Mhyteninformatik","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Salsi Diana","Typ":"UE7","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Schwarzer Joel","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Chardonnens Marina","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Chernikov Sergei  Tardy","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Niederberger Tiziana","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0}];
+let DATA = [{"Monat":1,"Datum":"2026-01-05","Name":"Knecht Davis","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2025-01-12","Name":"Furler Denise","Typ":"VE3.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Tescari Luca","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2025-01-12","Name":"Baumgartner David","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Kiefer Linda","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Killenberger Collin","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Zehnder Philipp","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Sonderegger Anthony","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Boner Christoph","Typ":"Muse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-12","Name":"Bopp Andreas","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-13","Name":"Jud Manuel","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-13","Name":"Nigro Alissa","Typ":"UE6+","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-14","Name":"Meier Fabio","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-14","Name":"Affolter Heinz","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Zwiauer Wolfgang","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Zwahlen Nadja","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Sager Heinz","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Seiler Luca","Typ":"UE7","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Weger Luca","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Haeni der Letzte Schrei","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Felber Stephan","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Zeller Beat","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Mettler Trudi","Typ":"35","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-19","Name":"Strittmatter Armin","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-19","Name":"Schlegel Michael","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2026-01-22","Name":"Wendy Pacini Tardy","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Bellon Alexandra Tardy","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Larrouturou Jeanne","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Briset Anne","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-26","Name":"Schneider Thomas","Typ":"VE XCon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-26","Name":"Sievers David","Typ":"VE XCon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2026-01-26","Name":"Schoenenberger Ralph","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Moetz Andi","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Hassler Aurel","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Born Volker","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":1,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Altorfer Theo","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Aklin Beat","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Marin Jan","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Kalt Martin","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Kalt Anja","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Schwab Businger Denise","Typ":"35","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Urfer Peter","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Businger Steve","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Luginbuehl Rolf","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Rettenmund Victor","Typ":"Avant","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Wyttenbach Daniel","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Schenk Mathias","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Schlaeppi Thomas","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-03","Name":"Renggli Andreas","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-03","Name":"Bleuler Ueli","Typ":"VE8","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-03","Name":"Knoerle Ketty","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-10","Name":"Kunzmann David Tardy","Typ":"A4s","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-11","Name":"Hermanek Robin","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Benz Urs","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Kasper-Roelli Sabine","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Riedel Janis","Typ":"Wave","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-13","Name":"Stalder Pascal StudioSound","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-16","Name":"Leutenegger Dominic","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-16","Name":"Durrer Daniel","Typ":"33","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-18","Name":"Urbanczik Yannick","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-18","Name":"Andrekson Andres Stress","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-18","Name":"Obrist Greg","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1.5,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-06-19","Name":"Chesham Kevin","Typ":"UE6+","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Buehlmann Simon","Typ":"FA 666 XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Buehlmann Lukas","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Forrer Adrian","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-23","Name":"Roth Florian","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-25","Name":"StudioSound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-26","Name":"Gfeller Stee GoLive","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-26","Name":"Gfeller Stee VE8","Typ":"VE8","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-26","Name":"Baier Rafael","Typ":"FIBAE 7","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-27","Name":"Tardy Laurent","Typ":"GoLive","Marke":"Vision Ears","Univeral":2,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":2,"Ersatz":0},{"Monat":2,"Datum":"2026-02-27","Name":"Rosset Dave","Typ":"Wave","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-28","Name":"Moine Sebastian","Typ":"VE Zen","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":2,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Siegfried Louis","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Horber Tabea","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Roider Raphael","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Zumbuehl Michael","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Schaefer Mike","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Bloesch Dennis","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Kuenzli Tobias","Typ":"33","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-05","Name":"Mytheninformatik","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":1,"WVK":1,"Ersatz":0},{"Monat":3,"Datum":"2026-03-11","Name":"Bolliger Thomas","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-13","Name":"Gegliardi Claudio","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Richard Pascal","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":2,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Oertig Marina","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-13","Name":"Hitz Andri","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Knuesel Tim","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Buergin Sven","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-16","Name":"Winkler Naima","Typ":"FIBAE 7","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Metanoia","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Chetelat Jeremy","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-17","Name":"Limani Yll","Typ":"RH6","Marke":"RH Acustics","Univeral":0,"Custom":2,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":2},{"Monat":3,"Datum":"2026-03-18","Name":"Bruegger Sven","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Bircher Mattia","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-06-18","Name":"Wettstein Andreas","Typ":"VE 3.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-06-18","Name":"Lanz Corrodo","Typ":"PM5","Marke":"Variphone","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Inniger Dina","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Prabakaran Gabriel","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Hofmann Rene","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Vello Leon","Typ":"FIBAE 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Ullmann Igor","Typ":"N8","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-18","Name":"Schuler Christian","Typ":"UE18","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-20","Name":"Peleeraux Zoe Eli","Typ":"A4s","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-20","Name":"Keller Andre","Typ":"N8","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-23","Name":"Luescher Musik Daniel","Typ":"GoLive","Marke":"Vision Ears","Univeral":2,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":2,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Pfaendler Dave","Typ":"VE2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Enkerli Jonas","Typ":"VE4.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Noeth Michael","Typ":"VE Zen","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-23","Name":"Widmer Sound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Sturny Laura","Typ":"VE5","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Vogelsang Ewald","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Koestinger Fabian","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Waldburger Marcel","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Riedel Janis Rep","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Hendriksen Alex","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-25","Name":"Goetz Benjamin","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-25","Name":"Ngarambe Yannick","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":1,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Kaeufeler Chris","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Baschi","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Tamas Michael","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Weissmann Nicolas","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Gutweniger Daniel","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Dean Mike","Typ":"FA 3E","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Zwicky Jana","Typ":"FA666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Maentisaari Teemu","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-30","Name":"Froehlich Rafael","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Duerrenberger Markus","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":0.5,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Salathe Martin","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":0.5,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Hoesle Micha","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Moreno Anthony","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Mueller Beat","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Piccany Benoit","Typ":"VE Xcon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Gafner Stefan","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Widmer Sound April","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Mhyteninformatik","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Salsi Diana","Typ":"UE7","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Schwarzer Joel","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Chardonnens Marina","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Chernikov Sergei Tardy","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Niederberger Tiziana","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0}];
 
 // ══════════════════════════════════════════════════════════════
 // HELPERS
 // ══════════════════════════════════════════════════════════════
 const MONATE=['','Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const fmt=v=>v===0?'—':Number.isInteger(v)?v:v.toFixed(1);
-
 function sum(arr,k){return arr.reduce((a,r)=>a+(r[k]||0),0);}
-function getYears(){return [...new Set(DATA.map(r=>r.Jahr||2026))].sort((a,b)=>b-a);}
-
 function getBadge(m){
   const map={'Vision Ears':'b-ve','Fischer Amps':'b-fa','Custom Art':'b-ca','HEAROS':'b-he',
     'Ultimate Ears':'b-ue','64 Audio':'b-64','Soundz':'b-sz','RH Acustics':'b-rh',
     'Variphone':'b-vp','Rep':'b-rep','InEar':'b-ie'};
-  return `<span class="badge ${map[m]||'b-other'}">${m||'—'}</span>`;
+  return '<span class="badge '+(map[m]||'b-other')+'">'+(m||'—')+'</span>';
 }
-
 function getCats(r){
   const c=[];
-  if(r['Custom']>0)c.push('Custom');
-  if(r['Univeral']>0)c.push('Universal');
-  if(r['GHS']>0)c.push('GHS');
-  if(r['Mulde']>0)c.push('Mulde');
-  if(r['Rep/Serv.']>0)c.push('Rep/Serv.');
-  if(r['Funk']>0)c.push('Funk');
-  if(r['Ambi']>0)c.push('Ambi');
-  if(r['MusikLover']>0)c.push('MusicLover');
-  if(r['WVK']>0)c.push('WVK');
-  if(r['Ersatz']>0)c.push('Ersatz');
+  if(r['Custom']>0)c.push('Custom');if(r['Univeral']>0)c.push('Universal');
+  if(r['GHS']>0)c.push('GHS');if(r['Mulde']>0)c.push('Mulde');
+  if(r['Rep/Serv.']>0)c.push('Rep/Serv.');if(r['Funk']>0)c.push('Funk');
+  if(r['Ambi']>0)c.push('Ambi');if(r['MusikLover']>0)c.push('MusicLover');
+  if(r['WVK']>0)c.push('WVK');if(r['Ersatz']>0)c.push('Ersatz');
   return c;
 }
-
 function getSupplierFromTyp(t){
   if(!t)return '';
   const u=t.toUpperCase().replace(/\s+/g,'');
   if(/^VE|^GOLIVE$/.test(u))return 'Vision Ears';
   if(/^FA|^ACE$|^RAPTURE$/.test(u))return 'Fischer Amps';
-  if(/^FIBAE|^ACE$/.test(u))return 'Custom Art';
+  if(/^FIBAE/.test(u))return 'Custom Art';
   if(/^H22|^H33|^H35|^35$|^33$/.test(u))return 'HEAROS';
-  if(/^SD|^LIFEPRO|^LIVEPRO/.test(u))return 'InEar';
   if(/^UE/.test(u))return 'Ultimate Ears';
-  if(/^RH|^GO2ROCK$/.test(u))return 'RH Acustics';
-  if(/^A\d|^N8$|^FOURTE$/.test(u))return '64 Audio';
-  if(/MUSE|MÜSE|DUNE|DÜNE|WAVE|BLADE|DREAM|FLAME|AVANT|SOUL/.test(u))return 'Soundz';
+  if(/^RH/.test(u))return 'RH Acustics';
+  if(/^A\d|^N8$/.test(u))return '64 Audio';
+  if(/MUSE|MUESE|DUNE|WAVE|BLADE|DREAM|FLAME|AVANT|SOUL/.test(u))return 'Soundz';
   return '';
 }
 
-// ══════════════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════════════
-let statMonat=0; // 0=alle
+let statMonat=0;
 
-// ══════════════════════════════════════════════════════════════
-// STATISTIK
-// ══════════════════════════════════════════════════════════════
 function renderStat(){
-  // Month filter bar
   const months=[...new Set(DATA.map(r=>r.Monat))].filter(Boolean).sort((a,b)=>a-b);
-  document.getElementById('stat-year-bar').innerHTML=''; // no year filter needed (always 2026)
+  document.getElementById('stat-year-bar').innerHTML='';
   document.getElementById('stat-month-bar').innerHTML=
-    `<span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);align-self:center">Monat:</span>`+
-    `<div class="filter-pill ${statMonat===0?'active':''}" onclick="setStatM(0)">Alle</div>`+
-    months.map(m=>`<div class="filter-pill ${statMonat===m?'active':''}" onclick="setStatM(${m})">${MONATE[m]}</div>`).join('');
-
+    '<span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);align-self:center">Monat:</span>'+
+    '<div class="filter-pill '+(statMonat===0?'active':'')+'" onclick="setStatM(0)">Alle</div>'+
+    months.map(m=>'<div class="filter-pill '+(statMonat===m?'active':'')+'" onclick="setStatM('+m+')">'+MONATE[m]+'</div>').join('');
   const d=statMonat===0?DATA:DATA.filter(r=>r.Monat===statMonat);
-
-  // KPIs
   const kontakte=d.length;
   const iem=sum(d,'Custom')+sum(d,'Univeral');
-  const ghs=sum(d,'GHS');
-  const rep=sum(d,'Rep/Serv.');
-  const funk=sum(d,'Funk');
-  const ambi=sum(d,'Ambi');
-  const ml=sum(d,'MusikLover');
-  const wvk=sum(d,'WVK');
-  const ersatz=sum(d,'Ersatz');
-
-  document.getElementById('kpi-row').innerHTML=`
-    <div class="kpi"><div class="kpi-label">Kontakte</div><div class="kpi-value">${kontakte}</div></div>
-    <div class="kpi green"><div class="kpi-label">IEM Total</div><div class="kpi-value">${fmt(iem)}</div></div>
-    <div class="kpi blue"><div class="kpi-label">GHS</div><div class="kpi-value">${fmt(ghs)}</div></div>
-    <div class="kpi orange"><div class="kpi-label">Rep / Serv.</div><div class="kpi-value">${fmt(rep)}</div></div>
-    <div class="kpi"><div class="kpi-label">Funk</div><div class="kpi-value">${fmt(funk)}</div></div>
-    <div class="kpi"><div class="kpi-label">Ambi</div><div class="kpi-value">${fmt(ambi)}</div></div>
-    <div class="kpi"><div class="kpi-label">MusicLover</div><div class="kpi-value">${fmt(ml)}</div></div>
-    <div class="kpi"><div class="kpi-label">WVK</div><div class="kpi-value">${fmt(wvk)}</div></div>
-    <div class="kpi"><div class="kpi-label">Ersatz</div><div class="kpi-value">${fmt(ersatz)}</div></div>`;
-
-  // Month table (only when showing "Alle")
+  const ghs=sum(d,'GHS'),rep=sum(d,'Rep/Serv.'),funk=sum(d,'Funk');
+  const ambi=sum(d,'Ambi'),ml=sum(d,'MusikLover'),wvk=sum(d,'WVK'),ersatz=sum(d,'Ersatz');
+  document.getElementById('kpi-row').innerHTML=
+    '<div class="kpi"><div class="kpi-label">Kontakte</div><div class="kpi-value">'+kontakte+'</div></div>'+
+    '<div class="kpi green"><div class="kpi-label">IEM Total</div><div class="kpi-value">'+fmt(iem)+'</div></div>'+
+    '<div class="kpi blue"><div class="kpi-label">GHS</div><div class="kpi-value">'+fmt(ghs)+'</div></div>'+
+    '<div class="kpi orange"><div class="kpi-label">Rep / Serv.</div><div class="kpi-value">'+fmt(rep)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Funk</div><div class="kpi-value">'+fmt(funk)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Ambi</div><div class="kpi-value">'+fmt(ambi)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">MusicLover</div><div class="kpi-value">'+fmt(ml)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">WVK</div><div class="kpi-value">'+fmt(wvk)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Ersatz</div><div class="kpi-value">'+fmt(ersatz)+'</div></div>';
   const sec=document.getElementById('month-table-section');
   if(statMonat===0){
     sec.style.display='block';
@@ -520,69 +425,35 @@ function renderStat(){
     DATA.forEach(r=>{
       const m=r.Monat;
       if(!byMonth[m])byMonth[m]={k:0,iem:0,ghs:0,rep:0,funk:0,ambi:0,ml:0,wvk:0,ersatz:0};
-      byMonth[m].k++;
-      byMonth[m].iem+=r['Custom']+(r['Univeral']||0);
-      byMonth[m].ghs+=r['GHS']||0;
-      byMonth[m].rep+=r['Rep/Serv.']||0;
-      byMonth[m].funk+=r['Funk']||0;
-      byMonth[m].ambi+=r['Ambi']||0;
-      byMonth[m].ml+=r['MusikLover']||0;
-      byMonth[m].wvk+=r['WVK']||0;
-      byMonth[m].ersatz+=r['Ersatz']||0;
+      byMonth[m].k++;byMonth[m].iem+=r['Custom']+(r['Univeral']||0);
+      byMonth[m].ghs+=r['GHS']||0;byMonth[m].rep+=r['Rep/Serv.']||0;
+      byMonth[m].funk+=r['Funk']||0;byMonth[m].ambi+=r['Ambi']||0;
+      byMonth[m].ml+=r['MusikLover']||0;byMonth[m].wvk+=r['WVK']||0;byMonth[m].ersatz+=r['Ersatz']||0;
     });
     const ms=Object.keys(byMonth).map(Number).sort((a,b)=>a-b);
     let tot={k:0,iem:0,ghs:0,rep:0,funk:0,ambi:0,ml:0,wvk:0,ersatz:0};
     ms.forEach(m=>{Object.keys(tot).forEach(k=>{tot[k]+=byMonth[m][k]||0;});});
-    const row=o=>`<tr>
-      <td class="num">${fmt(o.k)}</td>
-      <td class="num ${o.iem>0?'highlight':''}">${fmt(o.iem)}</td>
-      <td class="num">${fmt(o.ghs)}</td>
-      <td class="num">${fmt(o.rep)}</td>
-      <td class="num">${fmt(o.funk)}</td>
-      <td class="num">${fmt(o.ambi)}</td>
-      <td class="num">${fmt(o.ml)}</td>
-      <td class="num">${fmt(o.wvk)}</td>
-      <td class="num">${fmt(o.ersatz)}</td></tr>`;
-    document.getElementById('month-table').innerHTML=`
-      <thead><tr>
-        <th>Monat</th><th style="text-align:right">Kontakte</th><th style="text-align:right">IEM</th>
-        <th style="text-align:right">GHS</th><th style="text-align:right">Rep</th>
-        <th style="text-align:right">Funk</th><th style="text-align:right">Ambi</th>
-        <th style="text-align:right">MusicLov.</th><th style="text-align:right">WVK</th>
-        <th style="text-align:right">Ersatz</th>
-      </tr></thead>
-      <tbody>
-        ${ms.map(m=>`<tr><td><strong>${MONATE[m]}</strong></td>${row(byMonth[m]).replace('<tr>','').replace('</tr>','')}</tr>`).join('')}
-        <tr class="total-row"><td>Total</td>${row(tot).replace('<tr>','').replace('</tr>','')}</tr>
-      </tbody>`;
-  } else {
-    sec.style.display='none';
-  }
-
-  // Lieferanten chart
+    const row=o=>'<td class="num">'+fmt(o.k)+'</td><td class="num '+(o.iem>0?'highlight':'')+'">'+fmt(o.iem)+'</td><td class="num">'+fmt(o.ghs)+'</td><td class="num">'+fmt(o.rep)+'</td><td class="num">'+fmt(o.funk)+'</td><td class="num">'+fmt(o.ambi)+'</td><td class="num">'+fmt(o.ml)+'</td><td class="num">'+fmt(o.wvk)+'</td><td class="num">'+fmt(o.ersatz)+'</td>';
+    document.getElementById('month-table').innerHTML=
+      '<thead><tr><th>Monat</th><th style="text-align:right">Kontakte</th><th style="text-align:right">IEM</th><th style="text-align:right">GHS</th><th style="text-align:right">Rep</th><th style="text-align:right">Funk</th><th style="text-align:right">Ambi</th><th style="text-align:right">MusicLov.</th><th style="text-align:right">WVK</th><th style="text-align:right">Ersatz</th></tr></thead>'+
+      '<tbody>'+ms.map(m=>'<tr><td><strong>'+MONATE[m]+'</strong></td>'+row(byMonth[m])+'</tr>').join('')+'<tr class="total-row"><td>Total</td>'+row(tot)+'</tr></tbody>';
+  } else { sec.style.display='none'; }
   const sc={};
   d.forEach(r=>{const s=r.Marke||'Sonstige';sc[s]=(sc[s]||0)+1;});
   const sups=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
   const ms2=sups[0]?sups[0][1]:1;
   document.getElementById('chart-supplier').innerHTML=sups.map(([s,c])=>
-    `<div class="bar-row"><div class="bar-lbl" title="${s}">${s}</div><div class="bar-track"><div class="bar-fill blue" style="width:${Math.round(c/ms2*100)}%"></div></div><div class="bar-num">${c}</div></div>`
-  ).join('');
-
-  // Produkte chart (Top 20)
+    '<div class="bar-row"><div class="bar-lbl" title="'+s+'">'+s+'</div><div class="bar-track"><div class="bar-fill blue" style="width:'+Math.round(c/ms2*100)+'%"></div></div><div class="bar-num">'+c+'</div></div>').join('');
   const pc={};
-  d.forEach(r=>{if(r.Typ?.trim()){const k=r.Typ.trim();pc[k]=(pc[k]||0)+1;}});
+  d.forEach(r=>{if(r.Typ&&r.Typ.trim()){const k=r.Typ.trim();pc[k]=(pc[k]||0)+1;}});
   const prods=Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,20);
   const mp=prods[0]?prods[0][1]:1;
   document.getElementById('chart-product').innerHTML=prods.length
-    ?prods.map(([p,c])=>`<div class="bar-row"><div class="bar-lbl" title="${p}">${p}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/mp*100)}%"></div></div><div class="bar-num">${c}</div></div>`).join('')
+    ?prods.map(([p,c])=>'<div class="bar-row"><div class="bar-lbl" title="'+p+'">'+p+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(c/mp*100)+'%"></div></div><div class="bar-num">'+c+'</div></div>').join('')
     :'<div class="empty">Keine Daten</div>';
 }
-
 function setStatM(m){statMonat=m;renderStat();}
 
-// ══════════════════════════════════════════════════════════════
-// SUCHE
-// ══════════════════════════════════════════════════════════════
 function renderSearch(){
   const m=document.getElementById('f-monat').value;
   const n=(document.getElementById('f-name').value||'').toLowerCase();
@@ -600,63 +471,45 @@ function renderSearch(){
   document.getElementById('result-info').textContent=rows.length+' Einträge';
   const tb=document.getElementById('search-body');
   if(!rows.length){tb.innerHTML='<tr><td colspan="7"><div class="empty">Keine Einträge gefunden</div></td></tr>';return;}
-  tb.innerHTML=rows.map((r,i)=>{
-    const cats=getCats(r).map(c=>`<span class="cat-chip">${c}</span>`).join('');
+  tb.innerHTML=rows.map(r=>{
+    const cats=getCats(r).map(c=>'<span class="cat-chip">'+c+'</span>').join('');
     const idx=DATA.indexOf(r);
-    return `<tr>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3)">${MONATE[r.Monat]}</td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text3)">${r.Datum||''}</td>
-      <td style="font-weight:500">${r.Name}</td>
-      <td>${r.Typ||'—'}</td>
-      <td>${getBadge(r.Marke)}</td>
-      <td>${cats||'—'}</td>
-      <td><button class="copy-btn" onclick="openNLFromSearch(${idx})" id="nl-search-${idx}">✉ NL-Daten</button></td>
-    </tr>`;
+    return '<tr><td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text3)">'+MONATE[r.Monat]+'</td>'+
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text3)">'+( r.Datum||'')+'</td>'+
+      '<td style="font-weight:500">'+r.Name+'</td><td>'+(r.Typ||'—')+'</td>'+
+      '<td>'+getBadge(r.Marke)+'</td><td>'+(cats||'—')+'</td>'+
+      '<td><button class="copy-btn" onclick="openNLFromSearch('+idx+')">&#9993; NL-Daten</button></td></tr>';
   }).join('');
 }
-
 function clearSearch(){
   ['f-name','f-prod'].forEach(id=>document.getElementById(id).value='');
   ['f-monat','f-lief','f-kat'].forEach(id=>document.getElementById(id).value='');
   renderSearch();
 }
-
 function openNLFromSearch(idx){
   showPage('eingabe',document.querySelectorAll('.nav-btn')[2]);
-  const r=DATA[idx];
-  showNLPanel(r.Name,'','',r.Marke);
+  const r=DATA[idx];showNLPanel(r.Name,'','',r.Marke);
 }
-
-// ══════════════════════════════════════════════════════════════
-// EINGABE
-// ══════════════════════════════════════════════════════════════
 function toggleCat(lbl,id){
-  const cb=document.getElementById(id);
-  cb.checked=!cb.checked;
+  const cb=document.getElementById(id);cb.checked=!cb.checked;
   lbl.classList.toggle('on',cb.checked);
 }
-
 function autoSupplier(){
   const t=document.getElementById('e-typ').value.trim();
   const s=getSupplierFromTyp(t);
   const sel=document.getElementById('e-lieferant');
   const hint=document.getElementById('e-lief-hint');
-  if(s){sel.value=s;hint.textContent='✓ Automatisch erkannt';}
-  else{hint.textContent='';}
+  if(s){sel.value=s;hint.textContent='✓ Automatisch erkannt';}else{hint.textContent='';}
 }
-
 function saveEntry(){
   const name=document.getElementById('e-name').value.trim();
   if(!name){showToast('Bitte Name eingeben',true);return;}
   const lieferant=document.getElementById('e-lieferant').value;
   if(!lieferant){showToast('Bitte Lieferant wählen',true);return;}
-
   const entry={
     Monat:+document.getElementById('e-monat').value,
     Datum:document.getElementById('e-datum').value,
-    Name:name,
-    Typ:document.getElementById('e-typ').value.trim(),
-    Marke:lieferant,
+    Name:name,Typ:document.getElementById('e-typ').value.trim(),Marke:lieferant,
     email:document.getElementById('e-email').value.trim(),
     tel:document.getElementById('e-tel').value.trim(),
     'Univeral':document.getElementById('e-univeral').checked?1:0,
@@ -670,14 +523,8 @@ function saveEntry(){
     'WVK':document.getElementById('e-wvk').checked?1:0,
     'Ersatz':document.getElementById('e-ersatz').checked?1:0,
   };
-
   DATA.push(entry);
-
-  // Speichern in Google Sheets (kein Login nötig)
-  setStatus('sync','Speichere…');
   saveToSheet(entry);
-
-  // Reset form
   ['e-name','e-typ','e-email','e-tel'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('e-lieferant').value='';
   document.getElementById('e-lief-hint').textContent='';
@@ -685,29 +532,18 @@ function saveEntry(){
     const cb=document.getElementById('e-'+k);
     if(cb){cb.checked=false;document.getElementById('lbl-'+k).classList.remove('on');}
   });
-
   showToast('Gespeichert!');
   const note=document.getElementById('save-note');
-  note.classList.add('show');
-  setTimeout(()=>note.classList.remove('show'),2500);
-
-  // Show newsletter panel
+  note.classList.add('show');setTimeout(()=>note.classList.remove('show'),2500);
   showNLPanel(entry.Name,entry.email,entry.tel,entry.Marke);
 }
-
 function showNLPanel(name,email,tel,marke){
   const parts=(name||'').trim().split(/\s+/);
-  const nachname=parts[0]||'';
-  const vorname=parts.slice(1).join(' ')||nachname;
+  const nachname=parts[0]||'';const vorname=parts.slice(1).join(' ')||nachname;
   document.getElementById('nl-vorname-v').textContent=vorname||'—';
   document.getElementById('nl-nachname-v').textContent=nachname||'—';
   document.getElementById('nl-email-v').textContent=email||'—';
   document.getElementById('nl-tel-v').textContent=tel||'—';
-  ['nl-vorname','nl-nachname','nl-email','nl-tel'].forEach(id=>{
-    document.getElementById(id).dataset.val=document.getElementById(id+'_v'+''.replace('_v','-v')).textContent;
-    document.getElementById(id).classList.remove('cp');
-  });
-  // set data vals properly
   document.getElementById('nl-vorname').dataset.val=vorname;
   document.getElementById('nl-nachname').dataset.val=nachname;
   document.getElementById('nl-email').dataset.val=email||'';
@@ -715,23 +551,15 @@ function showNLPanel(name,email,tel,marke){
   document.getElementById('nl-warn').style.display=(!email||!tel)?'block':'none';
   document.getElementById('nl-panel').classList.add('show');
 }
-
 function copyNL(id){
-  const el=document.getElementById(id);
-  const val=el.dataset.val||'';
+  const el=document.getElementById(id);const val=el.dataset.val||'';
   if(!val||val==='—')return;
   navigator.clipboard.writeText(val).then(()=>{
-    el.classList.add('cp');
-    const v=document.getElementById(id+'-v');
-    const orig=v.textContent;
-    v.textContent='✓ Kopiert';
+    el.classList.add('cp');const v=document.getElementById(id+'-v');
+    const orig=v.textContent;v.textContent='✓ Kopiert';
     setTimeout(()=>{v.textContent=orig;el.classList.remove('cp');},1800);
   });
 }
-
-// ══════════════════════════════════════════════════════════════
-// UI
-// ══════════════════════════════════════════════════════════════
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -740,17 +568,11 @@ function showPage(id,btn){
   if(id==='statistik')renderStat();
   if(id==='suche')renderSearch();
 }
-
 function showToast(msg,err){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className='toast show'+(err?' err':'');
   setTimeout(()=>t.className='toast',3200);
 }
-
-// Init - rendering happens after login in onLoggedIn()
-window.addEventListener('DOMContentLoaded',()=>{
-  // default form date set after login
-});
 </script>
 </body>
 </html>

@@ -577,6 +577,64 @@ function onSheetData(rows) {
   });
   if (neu > 0) { renderStat(); renderSearch(); }
   setStatus('ok', 'Sheets verbunden · ' + sheetEntries.length + ' Einträge');
+  // Nach IEM-Daten auch Versand, Leihen, Inventar laden
+  loadSheetTab('Versand', onVersandData);
+  loadSheetTab('Leihen', onLeihenData);
+  loadSheetTab('Inventar', onInventarData);
+}
+
+function loadSheetTab(sheetName, callback) {
+  const old = document.getElementById('jsonp-'+sheetName);
+  if (old) old.remove();
+  const s = document.createElement('script');
+  s.id = 'jsonp-'+sheetName;
+  s.src = CONFIG.scriptUrl + '?callback='+callback.name+'&sheet='+sheetName+'&t=' + Date.now();
+  s.onerror = () => {};
+  document.head.appendChild(s);
+}
+
+function onVersandData(rows) {
+  if (!rows || rows.length < 2) return;
+  const fresh = rows.slice(1).filter(r=>r[0]).map(r=>({
+    id: String(r[0]), datum: String(r[1]||''), name: String(r[2]||''),
+    produkt: String(r[3]||''), tracking: String(r[4]||''), note: String(r[5]||'')
+  }));
+  // Merge: Sheets-Daten überschreiben lokale
+  const localIds = new Set(VERSAND.map(v=>v.id));
+  fresh.forEach(v => {
+    const idx = VERSAND.findIndex(x=>x.id===v.id);
+    if(idx>=0) VERSAND[idx]=v; else VERSAND.push(v);
+  });
+  saveVersandLocal();
+}
+
+function onLeihenData(rows) {
+  if (!rows || rows.length < 2) return;
+  const fresh = rows.slice(1).filter(r=>r[0]).map(r=>({
+    id: String(r[0]), name: String(r[1]||''), invId: String(r[2]||''),
+    invName: String(r[3]||''), invBrand: String(r[4]||''),
+    aus: String(r[5]||''), rueck: String(r[6]||''), returned: String(r[7]||''),
+    note: String(r[8]||''), status: String(r[9]||'active')
+  }));
+  fresh.forEach(l => {
+    const idx = LEIHEN.findIndex(x=>x.id===l.id);
+    if(idx>=0) LEIHEN[idx]=l; else LEIHEN.push(l);
+  });
+  syncStatus();
+  saveLeihenLocal();
+}
+
+function onInventarData(rows) {
+  if (!rows || rows.length < 2) return;
+  const fresh = rows.slice(1).filter(r=>r[0]).map(r=>({
+    id: String(r[0]), name: String(r[1]||''), brand: String(r[2]||''),
+    serial: String(r[3]||''), note: String(r[4]||'')
+  }));
+  fresh.forEach(i => {
+    const idx = INVENTAR.findIndex(x=>x.id===i.id);
+    if(idx>=0) INVENTAR[idx]=i; else INVENTAR.push(i);
+  });
+  saveInvLocal();
 }
 
 function loadSheetData() {

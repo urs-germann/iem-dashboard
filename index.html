@@ -284,6 +284,7 @@ textarea{width:100%;resize:vertical;min-height:70px}
     <button class="nav-btn" onclick="showPage('suche',this)">Suche</button>
     <button class="nav-btn" onclick="showPage('eingabe',this)">+ Eintrag</button>
     <button class="nav-btn leihe-btn" onclick="showPage('leihe',this)">🎧 Leihhörer</button>
+    <button class="nav-btn" onclick="showPage('versand',this)">📦 Versand</button>
   </nav>
 </header>
 
@@ -469,6 +470,85 @@ textarea{width:100%;resize:vertical;min-height:70px}
     </div>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════ VERSAND ═══════════════════════════════════════════ -->
+<div id="page-versand" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <div style="font-size:20px;font-weight:600">📦 Versand</div>
+    <button class="btn-sm" onclick="openVersandModal()">+ Neuer Versand</button>
+  </div>
+
+  <div class="kpi-row" id="versand-kpi-row"></div>
+
+  <div class="filter-bar">
+    <div class="ff"><div class="ff-label">Suche</div><input type="text" id="vs-search" placeholder="Name, Tracking…" oninput="renderVersandList()"></div>
+    <div class="ff"><div class="ff-label">Monat</div>
+      <select id="vs-monat" onchange="renderVersandList()">
+        <option value="">Alle</option>
+        <option value="1">Januar</option><option value="2">Februar</option><option value="3">März</option>
+        <option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option>
+        <option value="7">Juli</option><option value="8">August</option><option value="9">September</option>
+        <option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option>
+      </select>
+    </div>
+    <button class="btn-sm" onclick="document.getElementById('vs-search').value='';document.getElementById('vs-monat').value='';renderVersandList()">Zurücksetzen</button>
+  </div>
+
+  <div class="result-info" id="versand-result-info"></div>
+  <div class="tbl-scroll">
+    <table class="tbl">
+      <thead><tr><th>Datum</th><th>Name</th><th>Produkt</th><th>Trackingnummer</th><th>Post Tracking</th><th></th></tr></thead>
+      <tbody id="versand-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL: Versand erfassen -->
+<div class="modal-overlay" id="versand-modal">
+  <div class="modal">
+    <div class="modal-title" id="versand-modal-title">Neuer Versand</div>
+    <input type="hidden" id="vm-id">
+    <div class="form-section">Kunde</div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Name suchen / eingeben</div>
+        <input type="text" id="vm-name" class="form-input" placeholder="Müller Hans" oninput="vmNameSearch()">
+        <div id="vm-name-suggestions" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-top:2px;display:none;max-height:160px;overflow-y:auto;position:relative;z-index:10"></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Produkt</div>
+        <input type="text" id="vm-produkt" class="form-input" placeholder="VE Pure, FA 666…">
+      </div>
+    </div>
+    <div class="form-section">Versanddetails</div>
+    <div class="form-row">
+      <div class="form-field" style="max-width:180px">
+        <div class="form-label">Versanddatum</div>
+        <input type="date" id="vm-datum" class="form-input">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Trackingnummer (Post CH)</div>
+        <input type="text" id="vm-tracking" class="form-input" placeholder="98.44.00.000000.00 00000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Notiz</div>
+        <input type="text" id="vm-note" class="form-input" placeholder="Zusätzliche Infos…">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary green" onclick="saveVersand()">Speichern</button>
+      <button class="btn-sm" onclick="closeVersandModal()">Abbrechen</button>
+      <button class="btn-primary red" id="vm-delete-btn" onclick="deleteVersand()" style="display:none">Löschen</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /app -->
 
 <script>
@@ -1168,6 +1248,7 @@ function showPage(id,btn){
   if(id==='statistik')renderStat();
   if(id==='suche')renderSearch();
   if(id==='leihe'){syncStatus();renderLeiheTab(currentLeiheTab);}
+  if(id==='versand')renderVersandPage();
 }
 function showToast(msg,err){
   const t=document.getElementById('toast');
@@ -1179,6 +1260,160 @@ function showToast(msg,err){
 document.getElementById('leihe-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeLeiheModal();});
 document.getElementById('inv-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeInvModal();});
 document.getElementById('rueck-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeRueckModal();});
+document.getElementById('versand-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeVersandModal();});
+
+// ══════════════════════════════════════════════════════════════
+// VERSAND
+// ══════════════════════════════════════════════════════════════
+let VERSAND = loadLocal('earline_versand', []);
+
+function saveVersandLocal() { saveLocal('earline_versand', VERSAND); }
+
+async function saveVersandToSheet(v) {
+  try {
+    await fetch(CONFIG.scriptUrl, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        sheet: 'Versand',
+        row: [v.id, v.datum, v.name, v.produkt, v.tracking, v.note || '']
+      })
+    });
+  } catch(e) {}
+}
+
+function renderVersandPage() {
+  renderVersandKpi();
+  renderVersandList();
+}
+
+function renderVersandKpi() {
+  const total = VERSAND.length;
+  const thisMonth = VERSAND.filter(v => {
+    const m = new Date(v.datum).getMonth() + 1;
+    return m === (new Date().getMonth() + 1);
+  }).length;
+  document.getElementById('versand-kpi-row').innerHTML =
+    '<div class="kpi green"><div class="kpi-label">Total Versände</div><div class="kpi-value">'+total+'</div></div>'+
+    '<div class="kpi blue"><div class="kpi-label">Diesen Monat</div><div class="kpi-value">'+thisMonth+'</div></div>';
+}
+
+function renderVersandList() {
+  const q = (document.getElementById('vs-search').value||'').toLowerCase();
+  const m = document.getElementById('vs-monat').value;
+  let rows = VERSAND.filter(v => {
+    if(q && !v.name.toLowerCase().includes(q) && !(v.tracking||'').toLowerCase().includes(q) && !(v.produkt||'').toLowerCase().includes(q)) return false;
+    if(m && String(new Date(v.datum).getMonth()+1) !== m) return false;
+    return true;
+  }).sort((a,b)=>b.datum.localeCompare(a.datum));
+  document.getElementById('versand-result-info').textContent = rows.length + ' Einträge';
+  const tb = document.getElementById('versand-body');
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="6"><div class="empty">Keine Versände erfasst</div></td></tr>'; return; }
+  tb.innerHTML = rows.map(v => {
+    const trackUrl = v.tracking ? 'https://service.post.ch/ekp-web/ui/entry/search/'+encodeURIComponent(v.tracking.replace(/\s/g,'')) : '';
+    return '<tr>'+
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text3)">'+formatDate(v.datum)+'</td>'+
+      '<td style="font-weight:500">'+v.name+'</td>'+
+      '<td style="color:var(--text2)">'+( v.produkt||'—')+'</td>'+
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px">'+(v.tracking||'—')+'</td>'+
+      '<td>'+(trackUrl?'<a href="'+trackUrl+'" target="_blank" class="btn-link" style="font-size:11px;padding:3px 10px">🔗 Tracking</a>':'—')+'</td>'+
+      '<td style="display:flex;gap:6px;padding:6px 14px">'+
+        '<button class="icon-btn" onclick="openVersandModal(\''+v.id+'\')">✎</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function openVersandModal(id) {
+  const today = new Date().toISOString().split('T')[0];
+  if(id) {
+    const v = VERSAND.find(x=>x.id===id);
+    if(!v) return;
+    document.getElementById('versand-modal-title').textContent = 'Versand bearbeiten';
+    document.getElementById('vm-id').value = id;
+    document.getElementById('vm-name').value = v.name;
+    document.getElementById('vm-produkt').value = v.produkt||'';
+    document.getElementById('vm-datum').value = v.datum;
+    document.getElementById('vm-tracking').value = v.tracking||'';
+    document.getElementById('vm-note').value = v.note||'';
+    document.getElementById('vm-delete-btn').style.display='inline-flex';
+  } else {
+    document.getElementById('versand-modal-title').textContent = 'Neuer Versand';
+    document.getElementById('vm-id').value = '';
+    document.getElementById('vm-name').value = '';
+    document.getElementById('vm-produkt').value = '';
+    document.getElementById('vm-datum').value = today;
+    document.getElementById('vm-tracking').value = '';
+    document.getElementById('vm-note').value = '';
+    document.getElementById('vm-delete-btn').style.display='none';
+  }
+  document.getElementById('vm-name-suggestions').style.display='none';
+  document.getElementById('versand-modal').classList.add('show');
+}
+
+function closeVersandModal() {
+  document.getElementById('versand-modal').classList.remove('show');
+  document.getElementById('vm-name-suggestions').style.display='none';
+}
+
+function vmNameSearch() {
+  const q = document.getElementById('vm-name').value.toLowerCase();
+  const sug = document.getElementById('vm-name-suggestions');
+  if(q.length < 2){ sug.style.display='none'; return; }
+  const matches = [...new Set(DATA.map(r=>r.Name))].filter(n=>n.toLowerCase().includes(q)).slice(0,6);
+  if(!matches.length){ sug.style.display='none'; return; }
+  sug.innerHTML = matches.map(n=>
+    '<div onclick="vmSelectName(\''+n+'\')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border)" onmouseover="this.style.background=\'var(--surface2)\'" onmouseout="this.style.background=\'\'">'+n+'</div>'
+  ).join('');
+  sug.style.display='block';
+}
+
+function vmSelectName(name) {
+  document.getElementById('vm-name').value = name;
+  document.getElementById('vm-name-suggestions').style.display='none';
+  // Letztes Produkt dieses Kunden vorausfüllen
+  const last = DATA.filter(r=>r.Name===name).sort((a,b)=>b.Datum.localeCompare(a.Datum))[0];
+  if(last && last.Typ) document.getElementById('vm-produkt').value = last.Typ;
+}
+
+function saveVersand() {
+  const name = document.getElementById('vm-name').value.trim();
+  const datum = document.getElementById('vm-datum').value;
+  if(!name){ showToast('Bitte Name eingeben',true); return; }
+  if(!datum){ showToast('Bitte Datum eingeben',true); return; }
+  const id = document.getElementById('vm-id').value;
+  const entry = {
+    id: id || uid(),
+    datum, name,
+    produkt: document.getElementById('vm-produkt').value.trim(),
+    tracking: document.getElementById('vm-tracking').value.trim(),
+    note: document.getElementById('vm-note').value.trim()
+  };
+  if(id) { const idx=VERSAND.findIndex(v=>v.id===id); if(idx>=0) VERSAND[idx]=entry; }
+  else { VERSAND.push(entry); }
+  saveVersandLocal();
+  saveVersandToSheet(entry);
+  closeVersandModal();
+  showToast('Versand gespeichert ✓');
+  renderVersandPage();
+}
+
+function deleteVersand() {
+  const id = document.getElementById('vm-id').value;
+  if(!id) return;
+  if(!confirm('Versand-Eintrag löschen?')) return;
+  VERSAND = VERSAND.filter(v=>v.id!==id);
+  saveVersandLocal();
+  closeVersandModal();
+  showToast('Gelöscht');
+  renderVersandPage();
+}
+
+// In der Suche: Versand-Badge beim Kunden anzeigen
+function getVersandBadge(name) {
+  const count = VERSAND.filter(v=>v.name===name).length;
+  if(!count) return '';
+  return ' <span style="display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;background:#e4eaf0;color:var(--blue);border:1px solid var(--border);margin-left:4px">📦 '+count+'x versendet</span>';
+}
 
 // ══════════════════════════════════════════════════════════════
 // INIT

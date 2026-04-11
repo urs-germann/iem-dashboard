@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Music CRM // earline</title>
+<script>
+const CONFIG={
+  scriptUrl:'https://script.google.com/macros/s/AKfycby8MdXaNNYMk9I-HFQDBkPq1cAD5I5zX0BST4JJKo4zmNMNWyQ8s0LvVDTivwcFmLUd2Q/exec',
+  alertEmail:'u.germann@earline.ch',
+};
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#f0ede8;--surface:#faf9f7;--surface2:#e8e5df;--border:#d6d2c8;
+  --text:#1c1a17;--text2:#6b6760;--text3:#a09d97;
+  --green:#1a5c2a;--green-light:#e4f0e7;--green-mid:#2d7a3e;
+  --orange:#b84d00;--orange-light:#fdeee5;
+  --blue:#1a3a5c;--blue-light:#e4eaf0;
+  --red:#8b1a1a;--red-light:#f5e4e4;
+  --purple:#3a1a5c;--purple-light:#ede4f0;
+  --radius:8px;--shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+.header{background:var(--text);color:white;padding:0 28px;height:52px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100}
+.logo{font-size:16px;font-weight:600;letter-spacing:-.3px;font-family:'IBM Plex Mono',monospace}
+.logo span{opacity:.5;font-weight:400}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav-btn{padding:6px 16px;background:none;border:none;color:rgba(255,255,255,.6);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;border-radius:5px;transition:all .15s}
+.nav-btn:hover{color:white;background:rgba(255,255,255,.1)}
+.nav-btn.active{color:white;background:rgba(255,255,255,.18)}
+.nav-btn.leihe-btn{border-left:1px solid rgba(255,255,255,.15);margin-left:8px;padding-left:20px}
+.page{display:none;padding:24px 28px;max-width:1120px;margin:0 auto}
+.page.active{display:block}
+
+/* ── KPI ── */
+.stat-filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.filter-pill{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.filter-pill:hover{border-color:var(--text3)}
+.filter-pill.active{background:var(--text);color:white;border-color:var(--text)}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
+.kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px}
+.kpi-value{font-size:32px;font-weight:600;font-family:'IBM Plex Mono',monospace;letter-spacing:-1px;line-height:1}
+.kpi.green .kpi-value{color:var(--green)}
+.kpi.orange .kpi-value{color:var(--orange)}
+.kpi.blue .kpi-value{color:var(--blue)}
+.kpi.red .kpi-value{color:var(--red)}
+.kpi.purple .kpi-value{color:var(--purple)}
+
+/* ── Charts ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.chart-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text2);margin-bottom:16px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12px}
+.bar-lbl{min-width:120px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)}
+.bar-track{flex:1;height:7px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--green);transition:width .4s ease}
+.bar-fill.blue{background:var(--blue)}
+.bar-fill.orange{background:var(--orange)}
+.bar-num{min-width:26px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3)}
+
+/* ── Tables ── */
+.month-table-wrap{margin-bottom:20px}
+.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text2);margin-bottom:10px}
+.tbl{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);font-size:12px}
+.tbl th{background:var(--surface2);padding:9px 14px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:1px solid var(--border)}
+.tbl td{padding:8px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.total-row td{background:var(--surface2);font-weight:600;font-family:'IBM Plex Mono',monospace}
+.tbl td.num{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--text2)}
+.tbl td.num.highlight{color:var(--green);font-weight:600}
+.tbl tr:hover:not(.total-row) td{background:var(--surface2)}
+
+/* ── Filters ── */
+.filter-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px;box-shadow:var(--shadow)}
+.ff{display:flex;flex-direction:column;gap:4px}
+.ff-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{font-family:'IBM Plex Sans',sans-serif;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);outline:none;transition:border .15s}
+input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,input[type=date]:focus,input[type=number]:focus,select:focus,textarea:focus{border-color:var(--text3);background:white}
+input[type=text]{min-width:140px}
+select{min-width:130px}
+textarea{width:100%;resize:vertical;min-height:70px}
+.btn-sm{padding:7px 14px;border:1px solid var(--border);background:var(--surface);border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;color:var(--text2);transition:all .15s}
+.btn-sm:hover{border-color:var(--text3);color:var(--text)}
+.result-info{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:8px}
+.tbl-scroll{overflow-x:auto;border-radius:var(--radius)}
+
+/* ── Badges ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:500;white-space:nowrap}
+.b-ve{background:#e8edff;color:#1a2e7a}.b-fa{background:#e8f4ff;color:#0a3a6e}
+.b-ca{background:#edf5e8;color:#1a4a0e}.b-he{background:#fff5e0;color:#6b3800}
+.b-ie{background:#e6fff5;color:#0a4a2e}.b-ue{background:#f5e8ff;color:#3a0a6e}
+.b-rh{background:#ffe8f5;color:#6e0a3a}.b-64{background:#fff0e8;color:#6e2a0a}
+.b-sz{background:#f0e8ff;color:#3a0a6e}.b-vp{background:#e8fff5;color:#0a4a3a}
+.b-rep{background:var(--surface2);color:var(--text2)}.b-other{background:var(--surface2);color:var(--text2)}
+.status-badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600}
+.s-active{background:#e4f0e7;color:var(--green)}
+.s-overdue{background:var(--red-light);color:var(--red)}
+.s-returned{background:var(--surface2);color:var(--text3)}
+.s-available{background:#e4eaf0;color:var(--blue)}
+
+/* ── Form ── */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:700px;box-shadow:var(--shadow)}
+.form-section{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.form-section:first-child{margin-top:0}
+.form-row{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.form-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:150px}
+.form-label{font-size:11px;font-weight:600;color:var(--text2)}
+.form-input{width:100%;padding:9px 12px;min-width:unset;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:border .15s}
+.form-input:focus{border-color:var(--text3);background:white}
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:20px}
+.cat-check{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;user-select:none}
+.cat-check:hover{border-color:var(--text3);color:var(--text)}
+.cat-check.on{background:var(--green-light);border-color:#7dc48a;color:var(--green);font-weight:500}
+.cat-check input{display:none}
+.btn-primary{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;background:var(--text);color:white;border:none;border-radius:6px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.btn-primary:hover{opacity:.85}
+.btn-primary.red{background:var(--red)}
+.btn-primary.green{background:var(--green)}
+.btn-primary.blue{background:var(--blue)}
+.save-note{font-size:12px;color:var(--green);font-weight:500;margin-left:10px;opacity:0;transition:opacity .3s}
+.save-note.show{opacity:1}
+
+/* ── Newsletter Panel ── */
+.nl-panel{background:var(--green-light);border:1px solid #7dc48a;border-radius:var(--radius);padding:18px;margin-top:16px;display:none}
+.nl-panel.show{display:block}
+.nl-panel h4{font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px}
+.nl-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.nl-field{background:white;border:1px solid #b8d9be;border-radius:5px;padding:8px 12px;cursor:pointer;transition:all .15s}
+.nl-field:hover{border-color:var(--green)}
+.nl-field.cp{border-color:var(--green);background:#dcf0e0}
+.nl-field-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-bottom:2px}
+.nl-field-val{font-size:13px;color:var(--text);font-family:'IBM Plex Mono',monospace}
+.btn-link{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:var(--green);color:white;border:none;border-radius:5px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;text-decoration:none;transition:opacity .15s}
+.btn-link:hover{opacity:.85}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:white;padding:11px 18px;border-radius:6px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.err{background:var(--red)}
+
+/* ── Status ── */
+.empty{text-align:center;padding:32px;color:var(--text3);font-size:13px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0}
+.status-dot.ok{background:#4ade80}
+.status-dot.sync{background:#fbbf24;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Copy Button ── */
+.copy-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:11px;cursor:pointer;color:var(--text3);transition:all .15s;font-family:inherit}
+.copy-btn:hover{border-color:var(--green);color:var(--green)}
+.cat-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:500;background:var(--surface2);color:var(--text2);border:1px solid var(--border);margin-right:2px;margin-bottom:2px}
+
+/* ── Leihhörer Spezifisch ── */
+.leihe-subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0}
+.leihe-tab{padding:8px 18px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.leihe-tab:hover{color:var(--text)}
+.leihe-tab.active{color:var(--text);border-bottom-color:var(--text)}
+.leihe-sub{display:none}
+.leihe-sub.active{display:block}
+.alert-card{background:var(--red-light);border:1px solid #d6a0a0;border-radius:var(--radius);padding:14px 18px;margin-bottom:16px}
+.alert-card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--red);margin-bottom:8px}
+.alert-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(139,26,26,.1);gap:10px}
+.alert-item:last-child{border-bottom:none;padding-bottom:0}
+.alert-item-info{flex:1}
+.alert-item-name{font-weight:600;font-size:13px}
+.alert-item-detail{font-size:11px;color:var(--red);margin-top:2px;font-family:'IBM Plex Mono',monospace}
+.icon-btn{padding:5px 12px;border:1px solid var(--border);background:var(--surface);border-radius:5px;cursor:pointer;font-size:11px;font-weight:500;font-family:inherit;color:var(--text2);transition:all .15s;white-space:nowrap}
+.icon-btn:hover{border-color:var(--text3);color:var(--text)}
+.icon-btn.green{border-color:#7dc48a;color:var(--green);background:var(--green-light)}
+.icon-btn.green:hover{background:#c8e8cc}
+.icon-btn.red{border-color:#d6a0a0;color:var(--red);background:var(--red-light)}
+.icon-btn.red:hover{background:#f0c8c8}
+.leihe-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:700px){.leihe-grid{grid-template-columns:1fr}}
+.leihe-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:all .15s}
+.leihe-card:hover{border-color:var(--text3);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.leihe-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.leihe-card-name{font-weight:600;font-size:14px}
+.leihe-card-product{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
+.leihe-card-meta{font-size:11px;color:var(--text2)}
+.leihe-card-note{font-size:11px;color:var(--text3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-style:italic}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.inv-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
+.inv-card-name{font-weight:600;font-size:13px;margin-bottom:4px}
+.inv-card-brand{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:8px}
+.inv-card-stats{display:flex;gap:8px;align-items:center}
+.inv-stat{font-size:12px;font-family:'IBM Plex Mono',monospace}
+.inv-stat span{font-weight:600}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius);padding:28px;max-width:520px;width:calc(100% - 48px);box-shadow:0 8px 32px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:600;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<!-- MODAL: Neue Leihe / Leihe bearbeiten -->
+<div class="modal-overlay" id="leihe-modal">
+  <div class="modal">
+    <div class="modal-title" id="leihe-modal-title">Neue Leihe</div>
+    <input type="hidden" id="lm-id">
+    <div class="form-section">Kunde</div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Name / Firma</div><input type="text" id="lm-name" class="form-input" placeholder="Müller Hans"></div>
+    </div>
+    <div class="form-section">Gerät aus Inventar</div>
+    <div class="form-row">
+      <div class="form-field">
+        <div class="form-label">Inventar-Gerät wählen</div>
+        <select id="lm-inv" class="form-input" onchange="lmInvChange()"><option value="">— wählen —</option></select>
+      </div>
+    </div>
+    <div class="form-section">Zeitraum</div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Ausgabedatum</div><input type="date" id="lm-aus" class="form-input"></div>
+      <div class="form-field"><div class="form-label">Rückgabe bis</div><input type="date" id="lm-rueck" class="form-input"></div>
+    </div>
+    <div class="form-section">Notizen</div>
+    <div class="form-row">
+      <div class="form-field"><textarea id="lm-note" class="form-input" placeholder="Miete, Konditionen, Besonderheiten…"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary green" onclick="saveLeihe()">Speichern</button>
+      <button class="btn-sm" onclick="closeLeiheModal()">Abbrechen</button>
+      <button class="btn-primary red" id="lm-delete-btn" onclick="deleteLeihe()" style="display:none">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Inventar bearbeiten -->
+<div class="modal-overlay" id="inv-modal">
+  <div class="modal">
+    <div class="modal-title" id="inv-modal-title">Neues Gerät</div>
+    <input type="hidden" id="im-id">
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Gerätename / Modell</div><input type="text" id="im-name" class="form-input" placeholder="VE 4.2, FIBAE 3…"></div>
+      <div class="form-field"><div class="form-label">Marke</div><input type="text" id="im-brand" class="form-input" placeholder="Vision Ears"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Seriennummer / Interne ID</div><input type="text" id="im-serial" class="form-input" placeholder="VE-2024-001"></div>
+      <div class="form-field"><div class="form-label">Anmerkung</div><input type="text" id="im-note" class="form-input" placeholder="Zustand, Besonderheit…"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary green" onclick="saveInv()">Speichern</button>
+      <button class="btn-sm" onclick="closeInvModal()">Abbrechen</button>
+      <button class="btn-primary red" id="im-delete-btn" onclick="deleteInv()" style="display:none">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Rückgabe bestätigen -->
+<div class="modal-overlay" id="rueck-modal">
+  <div class="modal">
+    <div class="modal-title">Rückgabe bestätigen</div>
+    <input type="hidden" id="rm-id">
+    <p id="rm-text" style="color:var(--text2);font-size:13px;margin-bottom:16px"></p>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Rückgabedatum</div><input type="date" id="rm-date" class="form-input"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary green" onclick="confirmRueck()">Rückgabe bestätigen</button>
+      <button class="btn-sm" onclick="closeRueckModal()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+<header class="header">
+  <div class="logo">earline <span>// Music CRM</span></div>
+  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.5);font-family:'IBM Plex Mono',monospace">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Verbinde…</span>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showPage('statistik',this)">Statistik</button>
+    <button class="nav-btn" onclick="showPage('suche',this)">Suche</button>
+    <button class="nav-btn" onclick="showPage('eingabe',this)">+ Eintrag</button>
+    <button class="nav-btn leihe-btn" onclick="showPage('leihe',this)">🎧 Leihhörer</button>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════════════════ STATISTIK ═══════════════════════════════════════════ -->
+<div id="page-statistik" class="page active">
+  <div class="stat-filters" id="stat-year-bar"></div>
+  <div class="stat-filters" id="stat-month-bar" style="margin-top:-8px"></div>
+  <div class="kpi-row" id="kpi-row"></div>
+  <div class="month-table-wrap" id="month-table-section">
+    <div class="section-label">Monatsübersicht</div>
+    <div class="tbl-scroll"><table class="tbl" id="month-table"></table></div>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card"><div class="chart-title">Lieferanten</div><div id="chart-supplier"></div></div>
+    <div class="chart-card"><div class="chart-title">Produkte (Top 20)</div><div id="chart-product"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ SUCHE ═══════════════════════════════════════════ -->
+<div id="page-suche" class="page">
+  <div class="filter-bar">
+    <div class="ff"><div class="ff-label">Monat</div>
+      <select id="f-monat" onchange="renderSearch()">
+        <option value="">Alle</option>
+        <option value="1">Januar</option><option value="2">Februar</option><option value="3">März</option>
+        <option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option>
+        <option value="7">Juli</option><option value="8">August</option><option value="9">September</option>
+        <option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option>
+      </select>
+    </div>
+    <div class="ff"><div class="ff-label">Name</div><input type="text" id="f-name" placeholder="Name…" oninput="renderSearch()"></div>
+    <div class="ff"><div class="ff-label">Produkt</div><input type="text" id="f-prod" placeholder="VE Pure, ACE…" oninput="renderSearch()"></div>
+    <div class="ff"><div class="ff-label">Lieferant</div>
+      <select id="f-lief" onchange="renderSearch()">
+        <option value="">Alle</option>
+        <option>Vision Ears</option><option>Fischer Amps</option><option>Custom Art</option>
+        <option>HEAROS</option><option>Ultimate Ears</option><option>64 Audio</option>
+        <option>Soundz</option><option>RH Acustics</option><option>Variphone</option><option>Rep</option>
+      </select>
+    </div>
+    <div class="ff"><div class="ff-label">Kategorie</div>
+      <select id="f-kat" onchange="renderSearch()">
+        <option value="">Alle</option>
+        <option value="Custom">Custom</option><option value="Univeral">Universal</option>
+        <option value="GHS">GHS</option><option value="Rep/Serv.">Rep/Serv.</option>
+        <option value="Funk">Funk</option><option value="Ambi">Ambi</option>
+        <option value="MusikLover">MusicLover</option><option value="WVK">WVK</option>
+        <option value="Ersatz">Ersatz</option><option value="Mulde">Mulde</option>
+      </select>
+    </div>
+    <button class="btn-sm" onclick="clearSearch()">Zurücksetzen</button>
+  </div>
+  <div class="result-info" id="result-info"></div>
+  <div class="tbl-scroll">
+    <table class="tbl">
+      <thead><tr><th>Monat</th><th>Datum</th><th>Name</th><th>Produkt</th><th>Lieferant</th><th>Kategorien</th><th>Newsletter</th></tr></thead>
+      <tbody id="search-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ EINGABE ═══════════════════════════════════════════ -->
+<div id="page-eingabe" class="page">
+  <div class="form-card">
+    <div class="form-section">Zeitangabe</div>
+    <div class="form-row">
+      <div class="form-field" style="max-width:120px">
+        <div class="form-label">Monat</div>
+        <select id="e-monat" class="form-input">
+          <option value="1">Januar</option><option value="2">Februar</option><option value="3">März</option>
+          <option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option>
+          <option value="7">Juli</option><option value="8">August</option><option value="9">September</option>
+          <option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option>
+        </select>
+      </div>
+      <div class="form-field" style="max-width:160px">
+        <div class="form-label">Datum</div>
+        <input type="date" id="e-datum" class="form-input">
+      </div>
+    </div>
+    <div class="form-section">Kundendaten</div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">Name / Vorname</div><input type="text" id="e-name" class="form-input" placeholder="Müller Hans"></div>
+      <div class="form-field"><div class="form-label">Produkt / Typ</div><input type="text" id="e-typ" class="form-input" placeholder="VE Pure, ACE, GoLive…" oninput="autoSupplier()"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><div class="form-label">E-Mail <span style="color:var(--text3);font-weight:400">(für Newsletter)</span></div><input type="email" id="e-email" class="form-input" placeholder="name@email.ch"></div>
+      <div class="form-field"><div class="form-label">Telefon <span style="color:var(--text3);font-weight:400">(für Newsletter)</span></div><input type="tel" id="e-tel" class="form-input" placeholder="+41 79 123 45 67"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field" style="max-width:300px">
+        <div class="form-label">Lieferant</div>
+        <select id="e-lieferant" class="form-input">
+          <option value="">— bitte wählen —</option>
+          <option>Vision Ears</option><option>Fischer Amps</option><option>Custom Art</option>
+          <option>HEAROS</option><option>Ultimate Ears</option><option>64 Audio</option>
+          <option>Soundz</option><option>RH Acustics</option><option>Variphone</option>
+          <option>InEar</option><option>P-EAR-S</option><option>Rep</option><option>Sonstige</option>
+        </select>
+        <div id="e-lief-hint" style="font-size:11px;color:var(--green);margin-top:3px;min-height:15px;font-style:italic"></div>
+      </div>
+    </div>
+    <div class="form-section">Kategorien</div>
+    <div class="cats-grid">
+      <label class="cat-check" id="lbl-custom" onclick="toggleCat(this,'e-custom')"><input type="checkbox" id="e-custom"> Custom</label>
+      <label class="cat-check" id="lbl-univeral" onclick="toggleCat(this,'e-univeral')"><input type="checkbox" id="e-univeral"> Universal</label>
+      <label class="cat-check" id="lbl-ghs" onclick="toggleCat(this,'e-ghs')"><input type="checkbox" id="e-ghs"> GHS</label>
+      <label class="cat-check" id="lbl-mulde" onclick="toggleCat(this,'e-mulde')"><input type="checkbox" id="e-mulde"> Mulde</label>
+      <label class="cat-check" id="lbl-repserv" onclick="toggleCat(this,'e-repserv')"><input type="checkbox" id="e-repserv"> Rep/Serv.</label>
+      <label class="cat-check" id="lbl-funk" onclick="toggleCat(this,'e-funk')"><input type="checkbox" id="e-funk"> Funk</label>
+      <label class="cat-check" id="lbl-ambi" onclick="toggleCat(this,'e-ambi')"><input type="checkbox" id="e-ambi"> Ambi</label>
+      <label class="cat-check" id="lbl-musiklover" onclick="toggleCat(this,'e-musiklover')"><input type="checkbox" id="e-musiklover"> MusicLover</label>
+      <label class="cat-check" id="lbl-wvk" onclick="toggleCat(this,'e-wvk')"><input type="checkbox" id="e-wvk"> WVK</label>
+      <label class="cat-check" id="lbl-ersatz" onclick="toggleCat(this,'e-ersatz')"><input type="checkbox" id="e-ersatz"> Ersatz</label>
+    </div>
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">
+      <button class="btn-primary" id="save-btn" onclick="saveEntry()">Speichern</button>
+      <span class="save-note" id="save-note">&#10003; Gespeichert</span>
+    </div>
+    <div class="nl-panel" id="nl-panel">
+      <h4>&#128203; Kundendaten für Newsletter – klicke zum Kopieren</h4>
+      <div class="nl-fields">
+        <div class="nl-field" id="nl-vorname" onclick="copyNL('nl-vorname')"><div class="nl-field-label">Vorname</div><div class="nl-field-val" id="nl-vorname-v">—</div></div>
+        <div class="nl-field" id="nl-nachname" onclick="copyNL('nl-nachname')"><div class="nl-field-label">Nachname</div><div class="nl-field-val" id="nl-nachname-v">—</div></div>
+        <div class="nl-field" id="nl-email" onclick="copyNL('nl-email')"><div class="nl-field-label">E-Mail</div><div class="nl-field-val" id="nl-email-v">—</div></div>
+        <div class="nl-field" id="nl-tel" onclick="copyNL('nl-tel')"><div class="nl-field-label">Telefon</div><div class="nl-field-val" id="nl-tel-v">—</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <a href="https://www.newleads.ch/earline/" target="_blank" class="btn-link">&#128279; Earline-Formular öffnen</a>
+        <div id="nl-warn" style="font-size:11px;color:var(--orange);display:none">&#9888; E-Mail oder Telefon fehlt – bitte direkt eingeben.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ LEIHHÖRER ═══════════════════════════════════════════ -->
+<div id="page-leihe" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+    <div style="font-size:20px;font-weight:600">Leihhörer</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-sm" onclick="openLeiheModal()">+ Neue Leihe</button>
+      <button class="btn-sm" onclick="openInvModal()">+ Gerät erfassen</button>
+    </div>
+  </div>
+
+  <!-- Sub-Navigation -->
+  <div class="leihe-subnav">
+    <button class="leihe-tab active" onclick="showLeiheTab('uebersicht',this)">Übersicht</button>
+    <button class="leihe-tab" onclick="showLeiheTab('aktiv',this)">Aktive Leihen</button>
+    <button class="leihe-tab" onclick="showLeiheTab('inventar',this)">Inventar</button>
+    <button class="leihe-tab" onclick="showLeiheTab('verlauf',this)">Verlauf</button>
+  </div>
+
+  <!-- Übersicht -->
+  <div class="leihe-sub active" id="lsub-uebersicht">
+    <div class="kpi-row" id="leihe-kpi-row"></div>
+    <div id="leihe-alert-section"></div>
+    <div class="section-label" style="margin-bottom:10px">Zuletzt verliehen</div>
+    <div id="leihe-recent-list"></div>
+  </div>
+
+  <!-- Aktive Leihen -->
+  <div class="leihe-sub" id="lsub-aktiv">
+    <div class="filter-bar" style="margin-bottom:14px">
+      <div class="ff"><div class="ff-label">Suche</div><input type="text" id="la-search" placeholder="Name oder Gerät…" oninput="renderAktiveLeihen()"></div>
+      <button class="btn-sm" onclick="document.getElementById('la-search').value='';renderAktiveLeihen()">Zurücksetzen</button>
+    </div>
+    <div id="aktive-leihen-grid"></div>
+  </div>
+
+  <!-- Inventar -->
+  <div class="leihe-sub" id="lsub-inventar">
+    <div id="inventar-grid"></div>
+  </div>
+
+  <!-- Verlauf -->
+  <div class="leihe-sub" id="lsub-verlauf">
+    <div class="tbl-scroll">
+      <table class="tbl">
+        <thead><tr><th>Name</th><th>Gerät</th><th>Ausgabe</th><th>Rückgabe (soll)</th><th>Rückgabe (ist)</th><th>Status</th><th>Notiz</th></tr></thead>
+        <tbody id="verlauf-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// GOOGLE SHEETS CONNECTION
+// ══════════════════════════════════════════════════════════════
+function parseSheetRows(rows) {
+  return rows.slice(1).filter(r => r[2]).map(r => ({
+    Monat: parseInt(r[0]) || 0, Datum: String(r[1] || ''), Name: String(r[2] || ''),
+    Typ: String(r[3] || ''), Marke: String(r[4] || ''),
+    email: String(r[5] || ''), tel: String(r[6] || ''),
+    'Univeral': parseFloat(r[7]) || 0, 'Custom': parseFloat(r[8]) || 0,
+    'GHS': parseFloat(r[9]) || 0, 'Mulde': parseFloat(r[10]) || 0,
+    'Rep/Serv.': parseFloat(r[11]) || 0, 'Funk': parseFloat(r[12]) || 0,
+    'Ambi': parseFloat(r[13]) || 0, 'MusikLover': parseFloat(r[14]) || 0,
+    'WVK': parseFloat(r[15]) || 0, 'Ersatz': parseFloat(r[16]) || 0,
+  })).filter(r => r.Monat > 0);
+}
+
+function onSheetData(rows) {
+  const sheetEntries = parseSheetRows(rows);
+  const existing = new Set(DATA.map(r => r.Name + '|' + r.Datum));
+  let neu = 0;
+  sheetEntries.forEach(r => {
+    if (!existing.has(r.Name + '|' + r.Datum)) { DATA.push(r); neu++; }
+  });
+  if (neu > 0) { renderStat(); renderSearch(); }
+  setStatus('ok', 'Sheets verbunden · ' + sheetEntries.length + ' Einträge');
+}
+
+function loadSheetData() {
+  setStatus('sync', 'Verbinde mit Sheets…');
+  const old = document.getElementById('jsonp-script');
+  if (old) old.remove();
+  const s = document.createElement('script');
+  s.id = 'jsonp-script';
+  s.src = CONFIG.scriptUrl + '?callback=onSheetData&t=' + Date.now();
+  s.onerror = () => setStatus('', 'Sheets nicht erreichbar – lokale Daten aktiv');
+  document.head.appendChild(s);
+}
+
+async function saveToSheet(entry) {
+  try {
+    setStatus('sync', 'Speichere…');
+    await fetch(CONFIG.scriptUrl, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify([
+        entry.Monat, entry.Datum, entry.Name, entry.Typ, entry.Marke,
+        entry.email || '', entry.tel || '',
+        entry['Univeral'], entry['Custom'], entry['GHS'], entry['Mulde'],
+        entry['Rep/Serv.'], entry['Funk'], entry['Ambi'], entry['MusikLover'],
+        entry['WVK'], entry['Ersatz']
+      ])
+    });
+    setStatus('ok', 'Gespeichert in Sheets');
+  } catch (e) { setStatus('', 'Lokal gespeichert – Sheets offline'); }
+}
+
+// Leihhörer-Daten in Sheets speichern (Sheet: Leihen / Inventar)
+async function saveLeiheToSheet(leihe) {
+  try {
+    await fetch(CONFIG.scriptUrl, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        sheet: 'Leihen',
+        row: [leihe.id, leihe.name, leihe.invId, leihe.invName, leihe.invBrand,
+              leihe.aus, leihe.rueck, leihe.returned || '', leihe.note || '', leihe.status]
+      })
+    });
+  } catch (e) {}
+}
+
+async function saveInvToSheet(inv) {
+  try {
+    await fetch(CONFIG.scriptUrl, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        sheet: 'Inventar',
+        row: [inv.id, inv.name, inv.brand, inv.serial || '', inv.note || '']
+      })
+    });
+  } catch (e) {}
+}
+
+function setStatus(state, text) {
+  const d = document.getElementById('status-dot');
+  d.className = 'status-dot' + (state ? ' ' + state : '');
+  document.getElementById('status-text').textContent = text;
+}
+
+// ══════════════════════════════════════════════════════════════
+// IEM DATA
+// ══════════════════════════════════════════════════════════════
+let DATA = [{"Monat":1,"Datum":"2026-01-05","Name":"Knecht Davis","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2025-01-12","Name":"Furler Denise","Typ":"VE3.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Tescari Luca","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2025-01-12","Name":"Baumgartner David","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Kiefer Linda","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Killenberger Collin","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Zehnder Philipp","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Sonderegger Anthony","Typ":"Fibae 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-12","Name":"Boner Christoph","Typ":"Muse","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-12","Name":"Bopp Andreas","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-13","Name":"Jud Manuel","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-13","Name":"Nigro Alissa","Typ":"UE6+","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-14","Name":"Meier Fabio","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2025-01-14","Name":"Affolter Heinz","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Zwiauer Wolfgang","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Zwahlen Nadja","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Sager Heinz","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Seiler Luca","Typ":"UE7","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-14","Name":"Weger Luca","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Haeni der Letzte Schrei","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Felber Stephan","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Zeller Beat","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-15","Name":"Mettler Trudi","Typ":"35","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-19","Name":"Strittmatter Armin","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-19","Name":"Schlegel Michael","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2026-01-22","Name":"Wendy Pacini Tardy","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Bellon Alexandra Tardy","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Larrouturou Jeanne","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-23","Name":"Briset Anne","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":1,"Datum":"2026-01-26","Name":"Schneider Thomas","Typ":"VE XCon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-26","Name":"Sievers David","Typ":"VE XCon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":1,"Datum":"2026-01-26","Name":"Schoenenberger Ralph","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Moetz Andi","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Hassler Aurel","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Born Volker","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":1,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Altorfer Theo","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-27","Name":"Aklin Beat","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Marin Jan","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Kalt Martin","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-29","Name":"Kalt Anja","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Schwab Businger Denise","Typ":"35","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Urfer Peter","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Businger Steve","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Luginbuehl Rolf","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":1,"Datum":"2026-01-30","Name":"Rettenmund Victor","Typ":"Avant","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Wyttenbach Daniel","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Schenk Mathias","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-02","Name":"Schlaeppi Thomas","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-03","Name":"Renggli Andreas","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-03","Name":"Bleuler Ueli","Typ":"VE8","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-03","Name":"Knoerle Ketty","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-10","Name":"Kunzmann David Tardy","Typ":"A4s","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-11","Name":"Hermanek Robin","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Benz Urs","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Kasper-Roelli Sabine","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-12","Name":"Riedel Janis","Typ":"Wave","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-13","Name":"Stalder Pascal StudioSound","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-16","Name":"Leutenegger Dominic","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-16","Name":"Durrer Daniel","Typ":"33","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-18","Name":"Urbanczik Yannick","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-18","Name":"Andrekson Andres Stress","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-18","Name":"Obrist Greg","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1.5,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-06-19","Name":"Chesham Kevin","Typ":"UE6+","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Buehlmann Simon","Typ":"FA 666 XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Buehlmann Lukas","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-23","Name":"Forrer Adrian","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-23","Name":"Roth Florian","Typ":"ACE","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-25","Name":"StudioSound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":2,"Datum":"2026-02-26","Name":"Gfeller Stee GoLive","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-26","Name":"Gfeller Stee VE8","Typ":"VE8","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-26","Name":"Baier Rafael","Typ":"FIBAE 7","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":2,"Datum":"2026-02-27","Name":"Tardy Laurent","Typ":"GoLive","Marke":"Vision Ears","Univeral":2,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":2,"Ersatz":0},{"Monat":2,"Datum":"2026-02-27","Name":"Rosset Dave","Typ":"Wave","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":2,"Datum":"2026-02-28","Name":"Moine Sebastian","Typ":"VE Zen","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":2,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Siegfried Louis","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Horber Tabea","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Roider Raphael","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Zumbuehl Michael","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Schaefer Mike","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Bloesch Dennis","Typ":"Dune","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-02","Name":"Kuenzli Tobias","Typ":"33","Marke":"HEAROS","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-05","Name":"Mytheninformatik","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":1,"WVK":1,"Ersatz":0},{"Monat":3,"Datum":"2026-03-11","Name":"Bolliger Thomas","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-13","Name":"Gegliardi Claudio","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Richard Pascal","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":2,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Oertig Marina","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-13","Name":"Hitz Andri","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-13","Name":"Knuesel Tim","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Buergin Sven","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-16","Name":"Winkler Naima","Typ":"FIBAE 7","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Metanoia","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-16","Name":"Chetelat Jeremy","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-17","Name":"Limani Yll","Typ":"RH6","Marke":"RH Acustics","Univeral":0,"Custom":2,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":2},{"Monat":3,"Datum":"2026-03-18","Name":"Bruegger Sven","Typ":"Muese","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Bircher Mattia","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-06-18","Name":"Wettstein Andreas","Typ":"VE 3.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-06-18","Name":"Lanz Corrodo","Typ":"PM5","Marke":"Variphone","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Inniger Dina","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Prabakaran Gabriel","Typ":"Dream","Marke":"Soundz","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Hofmann Rene","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Vello Leon","Typ":"FIBAE 3","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-18","Name":"Ullmann Igor","Typ":"N8","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-18","Name":"Schuler Christian","Typ":"UE18","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-20","Name":"Peleeraux Zoe Eli","Typ":"A4s","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-20","Name":"Keller Andre","Typ":"N8","Marke":"64 Audio","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-23","Name":"Luescher Musik Daniel","Typ":"GoLive","Marke":"Vision Ears","Univeral":2,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":2,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Pfaendler Dave","Typ":"VE2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Enkerli Jonas","Typ":"VE4.2","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Noeth Michael","Typ":"VE Zen","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-23","Name":"Widmer Sound","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Sturny Laura","Typ":"VE5","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Vogelsang Ewald","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-23","Name":"Koestinger Fabian","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Waldburger Marcel","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Riedel Janis Rep","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":1,"Mulde":0,"Rep/Serv.":2,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-24","Name":"Hendriksen Alex","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-25","Name":"Goetz Benjamin","Typ":"Rapture","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-25","Name":"Ngarambe Yannick","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":1,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Kaeufeler Chris","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Baschi","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Tamas Michael","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Weissmann Nicolas","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Gutweniger Daniel","Typ":"FIBAE 5","Marke":"Custom Art","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Dean Mike","Typ":"FA 3E","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":1,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-26","Name":"Zwicky Jana","Typ":"FA666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Maentisaari Teemu","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":1},{"Monat":3,"Datum":"2026-03-30","Name":"Froehlich Rafael","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Duerrenberger Markus","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":0.5,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Salathe Martin","Typ":"VE Pro","Marke":"Vision Ears","Univeral":0,"Custom":0.5,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-30","Name":"Hoesle Micha","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Moreno Anthony","Typ":"FA 666XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Mueller Beat","Typ":"VE One","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":3,"Datum":"2026-03-31","Name":"Piccany Benoit","Typ":"VE Xcon","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Gafner Stefan","Typ":"","Marke":"Rep","Univeral":0,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":1,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Widmer Sound April","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Mhyteninformatik","Typ":"GoLive","Marke":"Vision Ears","Univeral":1,"Custom":0,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-02","Name":"Salsi Diana","Typ":"UE7","Marke":"Ultimate Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Schwarzer Joel","Typ":"VE Pure","Marke":"Vision Ears","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Chardonnens Marina","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Chernikov Sergei Tardy","Typ":"FA 4XB","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":1,"Ersatz":0},{"Monat":4,"Datum":"2026-04-07","Name":"Niederberger Tiziana","Typ":"FA 666","Marke":"Fischer Amps","Univeral":0,"Custom":1,"GHS":0,"Mulde":0,"Rep/Serv.":0,"Funk":0,"Ambi":0,"MusikLover":0,"WVK":0,"Ersatz":0}];
+
+// ══════════════════════════════════════════════════════════════
+// LEIHHÖRER DATA (localStorage für Persistenz im Browser)
+// ══════════════════════════════════════════════════════════════
+function loadLocal(key, def) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; }
+}
+function saveLocal(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+
+// Vorausgefülltes Inventar aus dem Screenshot
+let INVENTAR = loadLocal('earline_inventar', [
+  {id:'inv-1',name:'FA 1',brand:'Fischer Amps',serial:'FA1-001',note:''},
+  {id:'inv-2',name:'VE 4.2',brand:'Vision Ears',serial:'VE42-001',note:''},
+  {id:'inv-3',name:'VE 6 XC',brand:'Vision Ears',serial:'VE6XC-001',note:''},
+  {id:'inv-4',name:'VE 6 XC',brand:'Vision Ears',serial:'VE6XC-002',note:'Zweites Gerät'},
+  {id:'inv-5',name:'FIBAE 3',brand:'Custom Art',serial:'F3-001',note:''},
+  {id:'inv-6',name:'FIBAE 4',brand:'Custom Art',serial:'F4-001',note:''},
+  {id:'inv-7',name:'Gaudio',brand:'Gaudio',serial:'GAU-001',note:''},
+  {id:'inv-8',name:'Mipro Funkstrecke',brand:'Mipro',serial:'MIP-001',note:''},
+  {id:'inv-9',name:'Mipro Funkstrecke',brand:'Mipro',serial:'MIP-002',note:'Zweites Gerät'},
+  {id:'inv-10',name:'SD 3s',brand:'Sound Devices',serial:'SD3S-001',note:''},
+]);
+
+let LEIHEN = loadLocal('earline_leihen', [
+  {id:'l-1',name:'Tufilli Ernsto',invId:'inv-1',invName:'FA 1',invBrand:'Fischer Amps',aus:'2026-01-26',rueck:'2026-03-01',returned:'',note:'',status:'overdue'},
+  {id:'l-2',name:'Hatzelmann Florian',invId:'inv-2',invName:'VE 4.2',invBrand:'Vision Ears',aus:'2026-04-08',rueck:'2026-05-08',returned:'',note:'50.- Miete',status:'active'},
+  {id:'l-3',name:'Oertig Marina',invId:'inv-7',invName:'Gaudio',invBrand:'Gaudio',aus:'2026-04-02',rueck:'2026-05-02',returned:'',note:'',status:'active'},
+  {id:'l-4',name:'Zwicky Jana',invId:'inv-10',invName:'SD 3s',invBrand:'Sound Devices',aus:'2026-03-26',rueck:'2026-04-26',returned:'',note:'Miete bezahlt',status:'active'},
+  {id:'l-5',name:'Mahdi Yassin',invId:'inv-3',invName:'VE 6 XC',invBrand:'Vision Ears',aus:'2026-03-04',rueck:'2026-04-04',returned:'',note:'Faktura 20.-',status:'active'},
+  {id:'l-6',name:'Bochsler Luzi',invId:'inv-4',invName:'VE 6 XC',invBrand:'Vision Ears',aus:'2026-02-26',rueck:'2026-03-26',returned:'',note:'Miete wenn zurück',status:'active'},
+  {id:'l-7',name:'Müller Roman',invId:'inv-8',invName:'Mipro Funkstrecke',invBrand:'Mipro',aus:'2026-02-26',rueck:'2026-03-26',returned:'',note:'',status:'active'},
+  {id:'l-8',name:'Frei Hanspeter',invId:'inv-9',invName:'Mipro Funkstrecke',invBrand:'Mipro',aus:'2026-04-10',rueck:'2026-05-10',returned:'',note:'',status:'active'},
+  {id:'l-9',name:'Burkhardt Anja',invId:'inv-5',invName:'FIBAE 3',invBrand:'Custom Art',aus:'2026-03-14',rueck:'2026-04-14',returned:'',note:'Miete bezahlt',status:'active'},
+  {id:'l-10',name:'Götz Benjamin',invId:'inv-6',invName:'FIBAE 4',invBrand:'Custom Art',aus:'2026-03-25',rueck:'2026-04-25',returned:'',note:'',status:'active'},
+]);
+
+function saveLeihenLocal() { saveLocal('earline_leihen', LEIHEN); }
+function saveInvLocal() { saveLocal('earline_inventar', INVENTAR); }
+
+function uid() { return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2,7); }
+
+// Sync Überfälligkeit
+function syncStatus() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  LEIHEN.forEach(l => {
+    if (l.returned) { l.status = 'returned'; return; }
+    const r = new Date(l.rueck); r.setHours(0,0,0,0);
+    l.status = r < today ? 'overdue' : 'active';
+  });
+  saveLeihenLocal();
+}
+
+// ══════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════
+const MONATE=['','Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const fmt=v=>v===0?'—':Number.isInteger(v)?v:v.toFixed(1);
+function sum(arr,k){return arr.reduce((a,r)=>a+(r[k]||0),0);}
+function getBadge(m){
+  const map={'Vision Ears':'b-ve','Fischer Amps':'b-fa','Custom Art':'b-ca','HEAROS':'b-he',
+    'Ultimate Ears':'b-ue','64 Audio':'b-64','Soundz':'b-sz','RH Acustics':'b-rh',
+    'Variphone':'b-vp','Rep':'b-rep','InEar':'b-ie'};
+  return '<span class="badge '+(map[m]||'b-other')+'">'+(m||'—')+'</span>';
+}
+function getCats(r){
+  const c=[];
+  if(r['Custom']>0)c.push('Custom');if(r['Univeral']>0)c.push('Universal');
+  if(r['GHS']>0)c.push('GHS');if(r['Mulde']>0)c.push('Mulde');
+  if(r['Rep/Serv.']>0)c.push('Rep/Serv.');if(r['Funk']>0)c.push('Funk');
+  if(r['Ambi']>0)c.push('Ambi');if(r['MusikLover']>0)c.push('MusicLover');
+  if(r['WVK']>0)c.push('WVK');if(r['Ersatz']>0)c.push('Ersatz');
+  return c;
+}
+function getSupplierFromTyp(t){
+  if(!t)return '';
+  const u=t.toUpperCase().replace(/\s+/g,'');
+  if(/^VE|^GOLIVE$/.test(u))return 'Vision Ears';
+  if(/^FA|^ACE$|^RAPTURE$/.test(u))return 'Fischer Amps';
+  if(/^FIBAE/.test(u))return 'Custom Art';
+  if(/^H22|^H33|^H35|^35$|^33$/.test(u))return 'HEAROS';
+  if(/^UE/.test(u))return 'Ultimate Ears';
+  if(/^RH/.test(u))return 'RH Acustics';
+  if(/^A\d|^N8$/.test(u))return '64 Audio';
+  if(/MUSE|MUESE|DUNE|WAVE|BLADE|DREAM|FLAME|AVANT|SOUL/.test(u))return 'Soundz';
+  return '';
+}
+function formatDate(d) {
+  if(!d) return '—';
+  const p = d.split('-');
+  if(p.length !== 3) return d;
+  return p[2]+'.'+p[1]+'.'+p[0];
+}
+function daysUntil(dateStr) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(dateStr); d.setHours(0,0,0,0);
+  return Math.round((d - today) / 86400000);
+}
+function getStatusBadge(l) {
+  if(l.returned) return '<span class="status-badge s-returned">Zurück</span>';
+  const days = daysUntil(l.rueck);
+  if(days < 0) return '<span class="status-badge s-overdue">Überfällig '+Math.abs(days)+' Tage</span>';
+  if(days <= 7) return '<span class="status-badge s-active" style="background:#fff5e0;color:#6b3800">Fällig in '+days+' Tagen</span>';
+  return '<span class="status-badge s-active">Verliehen</span>';
+}
+
+// ══════════════════════════════════════════════════════════════
+// IEM STATISTIK
+// ══════════════════════════════════════════════════════════════
+let statMonat=0;
+function renderStat(){
+  const months=[...new Set(DATA.map(r=>r.Monat))].filter(Boolean).sort((a,b)=>a-b);
+  document.getElementById('stat-year-bar').innerHTML='';
+  document.getElementById('stat-month-bar').innerHTML=
+    '<span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);align-self:center">Monat:</span>'+
+    '<div class="filter-pill '+(statMonat===0?'active':'')+'" onclick="setStatM(0)">Alle</div>'+
+    months.map(m=>'<div class="filter-pill '+(statMonat===m?'active':'')+'" onclick="setStatM('+m+')">'+MONATE[m]+'</div>').join('');
+  const d=statMonat===0?DATA:DATA.filter(r=>r.Monat===statMonat);
+  const kontakte=d.length;
+  const iem=sum(d,'Custom')+sum(d,'Univeral');
+  const ghs=sum(d,'GHS'),rep=sum(d,'Rep/Serv.'),funk=sum(d,'Funk');
+  const ambi=sum(d,'Ambi'),ml=sum(d,'MusikLover'),wvk=sum(d,'WVK'),ersatz=sum(d,'Ersatz');
+  const activeLeihen=LEIHEN.filter(l=>!l.returned).length;
+  const overdue=LEIHEN.filter(l=>l.status==='overdue').length;
+  document.getElementById('kpi-row').innerHTML=
+    '<div class="kpi"><div class="kpi-label">Kontakte</div><div class="kpi-value">'+kontakte+'</div></div>'+
+    '<div class="kpi green"><div class="kpi-label">IEM Total</div><div class="kpi-value">'+fmt(iem)+'</div></div>'+
+    '<div class="kpi blue"><div class="kpi-label">GHS</div><div class="kpi-value">'+fmt(ghs)+'</div></div>'+
+    '<div class="kpi orange"><div class="kpi-label">Rep / Serv.</div><div class="kpi-value">'+fmt(rep)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">Funk</div><div class="kpi-value">'+fmt(funk)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-label">MusicLover</div><div class="kpi-value">'+fmt(ml)+'</div></div>'+
+    '<div class="kpi purple"><div class="kpi-label">Leihen aktiv</div><div class="kpi-value">'+activeLeihen+'</div></div>'+
+    (overdue?'<div class="kpi red"><div class="kpi-label">⚠ Überfällig</div><div class="kpi-value">'+overdue+'</div></div>':'');
+  const sec=document.getElementById('month-table-section');
+  if(statMonat===0){
+    sec.style.display='block';
+    const byMonth={};
+    DATA.forEach(r=>{
+      const m=r.Monat;
+      if(!byMonth[m])byMonth[m]={k:0,iem:0,ghs:0,rep:0,funk:0,ambi:0,ml:0,wvk:0,ersatz:0};
+      byMonth[m].k++;byMonth[m].iem+=r['Custom']+(r['Univeral']||0);
+      byMonth[m].ghs+=r['GHS']||0;byMonth[m].rep+=r['Rep/Serv.']||0;
+      byMonth[m].funk+=r['Funk']||0;byMonth[m].ambi+=r['Ambi']||0;
+      byMonth[m].ml+=r['MusikLover']||0;byMonth[m].wvk+=r['WVK']||0;byMonth[m].ersatz+=r['Ersatz']||0;
+    });
+    const ms=Object.keys(byMonth).map(Number).sort((a,b)=>a-b);
+    let tot={k:0,iem:0,ghs:0,rep:0,funk:0,ambi:0,ml:0,wvk:0,ersatz:0};
+    ms.forEach(m=>{Object.keys(tot).forEach(k=>{tot[k]+=byMonth[m][k]||0;});});
+    const row=o=>'<td class="num">'+fmt(o.k)+'</td><td class="num '+(o.iem>0?'highlight':'')+'">'+fmt(o.iem)+'</td><td class="num">'+fmt(o.ghs)+'</td><td class="num">'+fmt(o.rep)+'</td><td class="num">'+fmt(o.funk)+'</td><td class="num">'+fmt(o.ambi)+'</td><td class="num">'+fmt(o.ml)+'</td><td class="num">'+fmt(o.wvk)+'</td><td class="num">'+fmt(o.ersatz)+'</td>';
+    document.getElementById('month-table').innerHTML=
+      '<thead><tr><th>Monat</th><th style="text-align:right">Kontakte</th><th style="text-align:right">IEM</th><th style="text-align:right">GHS</th><th style="text-align:right">Rep</th><th style="text-align:right">Funk</th><th style="text-align:right">Ambi</th><th style="text-align:right">MusicLov.</th><th style="text-align:right">WVK</th><th style="text-align:right">Ersatz</th></tr></thead>'+
+      '<tbody>'+ms.map(m=>'<tr><td><strong>'+MONATE[m]+'</strong></td>'+row(byMonth[m])+'</tr>').join('')+'<tr class="total-row"><td>Total</td>'+row(tot)+'</tr></tbody>';
+  } else { sec.style.display='none'; }
+  const sc={};
+  d.forEach(r=>{const s=r.Marke||'Sonstige';sc[s]=(sc[s]||0)+1;});
+  const sups=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
+  const ms2=sups[0]?sups[0][1]:1;
+  document.getElementById('chart-supplier').innerHTML=sups.map(([s,c])=>
+    '<div class="bar-row"><div class="bar-lbl" title="'+s+'">'+s+'</div><div class="bar-track"><div class="bar-fill blue" style="width:'+Math.round(c/ms2*100)+'%"></div></div><div class="bar-num">'+c+'</div></div>').join('');
+  const pc={};
+  d.forEach(r=>{if(r.Typ&&r.Typ.trim()){const k=r.Typ.trim();pc[k]=(pc[k]||0)+1;}});
+  const prods=Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  const mp=prods[0]?prods[0][1]:1;
+  document.getElementById('chart-product').innerHTML=prods.length
+    ?prods.map(([p,c])=>'<div class="bar-row"><div class="bar-lbl" title="'+p+'">'+p+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(c/mp*100)+'%"></div></div><div class="bar-num">'+c+'</div></div>').join('')
+    :'<div class="empty">Keine Daten</div>';
+}
+function setStatM(m){statMonat=m;renderStat();}
+
+// ══════════════════════════════════════════════════════════════
+// SUCHE
+// ══════════════════════════════════════════════════════════════
+function renderSearch(){
+  const m=document.getElementById('f-monat').value;
+  const n=(document.getElementById('f-name').value||'').toLowerCase();
+  const p=(document.getElementById('f-prod').value||'').toLowerCase();
+  const l=document.getElementById('f-lief').value;
+  const k=document.getElementById('f-kat').value;
+  const rows=DATA.filter(r=>{
+    if(m&&r.Monat!=m)return false;
+    if(n&&!r.Name.toLowerCase().includes(n))return false;
+    if(p&&!(r.Typ||'').toLowerCase().includes(p))return false;
+    if(l&&r.Marke!==l)return false;
+    if(k&&!(r[k]>0))return false;
+    return true;
+  });
+  document.getElementById('result-info').textContent=rows.length+' Einträge';
+  const tb=document.getElementById('search-body');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="7"><div class="empty">Keine Einträge gefunden</div></td></tr>';return;}
+  tb.innerHTML=rows.map(r=>{
+    const cats=getCats(r).map(c=>'<span class="cat-chip">'+c+'</span>').join('');
+    const idx=DATA.indexOf(r);
+    return '<tr><td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text3)">'+MONATE[r.Monat]+'</td>'+
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text3)">'+(r.Datum||'')+'</td>'+
+      '<td style="font-weight:500">'+r.Name+'</td><td>'+(r.Typ||'—')+'</td>'+
+      '<td>'+getBadge(r.Marke)+'</td><td>'+(cats||'—')+'</td>'+
+      '<td><button class="copy-btn" onclick="openNLFromSearch('+idx+')">✉ NL-Daten</button></td></tr>';
+  }).join('');
+}
+function clearSearch(){
+  ['f-name','f-prod'].forEach(id=>document.getElementById(id).value='');
+  ['f-monat','f-lief','f-kat'].forEach(id=>document.getElementById(id).value='');
+  renderSearch();
+}
+
+// ══════════════════════════════════════════════════════════════
+// LEIHHÖRER RENDER
+// ══════════════════════════════════════════════════════════════
+let currentLeiheTab = 'uebersicht';
+
+function showLeiheTab(tab, btn) {
+  currentLeiheTab = tab;
+  document.querySelectorAll('.leihe-sub').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.leihe-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('lsub-'+tab).classList.add('active');
+  if(btn) btn.classList.add('active');
+  renderLeiheTab(tab);
+}
+
+function renderLeiheTab(tab) {
+  syncStatus();
+  if(tab==='uebersicht') renderLeiheUebersicht();
+  else if(tab==='aktiv') renderAktiveLeihen();
+  else if(tab==='inventar') renderInventar();
+  else if(tab==='verlauf') renderVerlauf();
+}
+
+function renderLeiheUebersicht() {
+  const active = LEIHEN.filter(l=>!l.returned);
+  const overdue = LEIHEN.filter(l=>l.status==='overdue');
+  const invTotal = INVENTAR.length;
+  const invBusy = new Set(LEIHEN.filter(l=>!l.returned).map(l=>l.invId)).size;
+  document.getElementById('leihe-kpi-row').innerHTML=
+    '<div class="kpi green"><div class="kpi-label">Verliehen</div><div class="kpi-value">'+active.length+'</div></div>'+
+    '<div class="kpi blue"><div class="kpi-label">Verfügbar</div><div class="kpi-value">'+(invTotal-invBusy)+'</div></div>'+
+    (overdue.length?'<div class="kpi red"><div class="kpi-label">⚠ Überfällig</div><div class="kpi-value">'+overdue.length+'</div></div>':'')+
+    '<div class="kpi"><div class="kpi-label">Inventar total</div><div class="kpi-value">'+invTotal+'</div></div>';
+
+  // Alert-Box für Überfällige
+  const alertSec = document.getElementById('leihe-alert-section');
+  if(overdue.length) {
+    alertSec.innerHTML='<div class="alert-card"><div class="alert-card-title">⚠ Überfällige Rückgaben</div>'+
+      overdue.map(l=>'<div class="alert-item"><div class="alert-item-info">'+
+        '<div class="alert-item-name">'+l.name+'</div>'+
+        '<div class="alert-item-detail">'+l.invName+' — fällig '+formatDate(l.rueck)+'</div>'+
+      '</div>'+
+      '<button class="icon-btn green" onclick="openRueckModal(\''+l.id+'\')">↩ Zurück</button>'+
+      '<button class="icon-btn" onclick="openLeiheModal(\''+l.id+'\')">Bearbeiten</button>'+
+      '</div>').join('')+'</div>';
+  } else {
+    alertSec.innerHTML='';
+  }
+
+  // Recent list
+  const recent = [...LEIHEN].filter(l=>!l.returned).sort((a,b)=>b.aus.localeCompare(a.aus)).slice(0,8);
+  document.getElementById('leihe-recent-list').innerHTML = recent.length
+    ? '<div class="tbl-scroll"><table class="tbl"><thead><tr><th>Name</th><th>Gerät</th><th>Ausgabe</th><th>Rückgabe bis</th><th>Status</th><th></th></tr></thead><tbody>'+
+      recent.map(l=>'<tr><td style="font-weight:500">'+l.name+'</td><td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px">'+l.invName+'</td>'+
+        '<td style="font-size:12px;color:var(--text3)">'+formatDate(l.aus)+'</td>'+
+        '<td style="font-size:12px;color:var(--text3)">'+formatDate(l.rueck)+'</td>'+
+        '<td>'+getStatusBadge(l)+'</td>'+
+        '<td style="display:flex;gap:6px;padding:6px 14px"><button class="icon-btn green" onclick="openRueckModal(\''+l.id+'\')">↩ Zurück</button><button class="icon-btn" onclick="openLeiheModal(\''+l.id+'\')">✎</button></td>'+
+      '</tr>').join('')+
+      '</tbody></table></div>'
+    : '<div class="empty">Keine aktiven Leihen</div>';
+}
+
+function renderAktiveLeihen() {
+  syncStatus();
+  const q = (document.getElementById('la-search')||{}).value || '';
+  const filtered = LEIHEN.filter(l => {
+    if(l.returned) return false;
+    if(q && !l.name.toLowerCase().includes(q.toLowerCase()) && !l.invName.toLowerCase().includes(q.toLowerCase())) return false;
+    return true;
+  }).sort((a,b) => a.rueck.localeCompare(b.rueck));
+
+  document.getElementById('aktive-leihen-grid').innerHTML = filtered.length
+    ? '<div class="leihe-grid">'+filtered.map(l=>{
+      const days = daysUntil(l.rueck);
+      const urgent = days < 0 || days <= 7;
+      return '<div class="leihe-card" style="'+(l.status==='overdue'?'border-color:#d6a0a0;':urgent?'border-color:#d6c4a0;':'')+'">'+
+        '<div class="leihe-card-header">'+
+          '<div class="leihe-card-name">'+l.name+'</div>'+
+          getStatusBadge(l)+
+        '</div>'+
+        '<div class="leihe-card-product">'+l.invBrand+' — '+l.invName+'</div>'+
+        '<div class="leihe-card-meta">Ausgabe: '+formatDate(l.aus)+' · Rückgabe: <strong>'+formatDate(l.rueck)+'</strong></div>'+
+        (l.note?'<div class="leihe-card-note">'+l.note+'</div>':'')+
+        '<div style="display:flex;gap:6px;margin-top:10px">'+
+          '<button class="icon-btn green" onclick="openRueckModal(\''+l.id+'\')">↩ Rückgabe bestätigen</button>'+
+          '<button class="icon-btn" onclick="openLeiheModal(\''+l.id+'\')">✎ Bearbeiten</button>'+
+        '</div>'+
+      '</div>';
+    }).join('')+'</div>'
+    : '<div class="empty">Keine aktiven Leihen</div>';
+}
+
+function renderInventar() {
+  const busyIds = new Set(LEIHEN.filter(l=>!l.returned).map(l=>l.invId));
+  document.getElementById('inventar-grid').innerHTML =
+    '<div style="display:flex;justify-content:flex-end;margin-bottom:12px">'+
+      '<button class="btn-sm" onclick="openInvModal()">+ Gerät erfassen</button>'+
+    '</div>'+
+    '<div class="inv-grid">'+
+    INVENTAR.map(inv=>{
+      const busy = busyIds.has(inv.id);
+      const activeLeihe = LEIHEN.find(l=>l.invId===inv.id && !l.returned);
+      return '<div class="inv-card" style="'+(busy?'border-color:#7dc48a;':'')+'">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+          '<div><div class="inv-card-name">'+inv.name+'</div>'+
+          '<div class="inv-card-brand">'+inv.brand+(inv.serial?' · '+inv.serial:'')+'</div></div>'+
+          (busy?'<span class="status-badge s-active">Verliehen</span>':'<span class="status-badge s-available">Verfügbar</span>')+
+        '</div>'+
+        (inv.note?'<div style="font-size:11px;color:var(--text3);margin-top:4px">'+inv.note+'</div>':'')+
+        (activeLeihe?'<div style="font-size:11px;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);color:var(--text2)">📋 '+activeLeihe.name+' bis '+formatDate(activeLeihe.rueck)+'</div>':'')+
+        '<div style="display:flex;gap:6px;margin-top:8px">'+
+          '<button class="icon-btn" onclick="openInvModal(\''+inv.id+'\')">✎ Bearbeiten</button>'+
+          (!busy?'<button class="icon-btn green" onclick="openLeiheModalWithInv(\''+inv.id+'\')">+ Verleihen</button>':'')+
+        '</div>'+
+      '</div>';
+    }).join('')+
+    '</div>';
+}
+
+function renderVerlauf() {
+  const sorted = [...LEIHEN].sort((a,b)=>b.aus.localeCompare(a.aus));
+  document.getElementById('verlauf-body').innerHTML = sorted.length
+    ? sorted.map(l=>'<tr>'+
+        '<td style="font-weight:500">'+l.name+'</td>'+
+        '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px">'+l.invBrand+' — '+l.invName+'</td>'+
+        '<td style="font-size:12px;color:var(--text3)">'+formatDate(l.aus)+'</td>'+
+        '<td style="font-size:12px;color:var(--text3)">'+formatDate(l.rueck)+'</td>'+
+        '<td style="font-size:12px;color:var(--text3)'+(l.returned?';color:var(--green)':'')+'">'+formatDate(l.returned)+'</td>'+
+        '<td>'+getStatusBadge(l)+'</td>'+
+        '<td style="font-size:11px;color:var(--text3);font-style:italic">'+(l.note||'')+'</td>'+
+      '</tr>').join('')
+    : '<tr><td colspan="7"><div class="empty">Keine Einträge</div></td></tr>';
+}
+
+// ══════════════════════════════════════════════════════════════
+// MODALS – LEIHE
+// ══════════════════════════════════════════════════════════════
+function openLeiheModal(id) {
+  const modal = document.getElementById('leihe-modal');
+  const today = new Date().toISOString().split('T')[0];
+  // Inventar Dropdown füllen
+  const busyIds = id
+    ? new Set(LEIHEN.filter(l=>!l.returned && l.id!==id).map(l=>l.invId))
+    : new Set(LEIHEN.filter(l=>!l.returned).map(l=>l.invId));
+  const sel = document.getElementById('lm-inv');
+  sel.innerHTML = '<option value="">— Gerät wählen —</option>'+
+    INVENTAR.map(inv=>'<option value="'+inv.id+'" '+(busyIds.has(inv.id)?'disabled style="color:var(--text3)"':'')+'>'+inv.brand+' — '+inv.name+(busyIds.has(inv.id)?' (verliehen)':'')+'</option>').join('');
+
+  if(id) {
+    const l = LEIHEN.find(x=>x.id===id);
+    if(!l) return;
+    document.getElementById('leihe-modal-title').textContent='Leihe bearbeiten';
+    document.getElementById('lm-id').value = id;
+    document.getElementById('lm-name').value = l.name;
+    sel.value = l.invId;
+    document.getElementById('lm-aus').value = l.aus;
+    document.getElementById('lm-rueck').value = l.rueck;
+    document.getElementById('lm-note').value = l.note || '';
+    document.getElementById('lm-delete-btn').style.display='inline-flex';
+  } else {
+    document.getElementById('leihe-modal-title').textContent='Neue Leihe';
+    document.getElementById('lm-id').value = '';
+    document.getElementById('lm-name').value = '';
+    sel.value = '';
+    document.getElementById('lm-aus').value = today;
+    document.getElementById('lm-rueck').value = '';
+    document.getElementById('lm-note').value = '';
+    document.getElementById('lm-delete-btn').style.display='none';
+  }
+  modal.classList.add('show');
+}
+
+function openLeiheModalWithInv(invId) {
+  openLeiheModal();
+  setTimeout(()=>{ document.getElementById('lm-inv').value = invId; }, 10);
+}
+
+function lmInvChange() {}
+
+function closeLeiheModal() { document.getElementById('leihe-modal').classList.remove('show'); }
+
+function saveLeihe() {
+  const name = document.getElementById('lm-name').value.trim();
+  const invId = document.getElementById('lm-inv').value;
+  const aus = document.getElementById('lm-aus').value;
+  const rueck = document.getElementById('lm-rueck').value;
+  if(!name){showToast('Bitte Name eingeben',true);return;}
+  if(!invId){showToast('Bitte Gerät wählen',true);return;}
+  if(!rueck){showToast('Bitte Rückgabedatum setzen',true);return;}
+  const inv = INVENTAR.find(i=>i.id===invId);
+  const id = document.getElementById('lm-id').value;
+  const entry = {
+    id: id || uid(),
+    name, invId, invName: inv?inv.name:'', invBrand: inv?inv.brand:'',
+    aus, rueck, returned:'',
+    note: document.getElementById('lm-note').value.trim(),
+    status: 'active'
+  };
+  if(id) {
+    const idx = LEIHEN.findIndex(l=>l.id===id);
+    if(idx>=0){ const old=LEIHEN[idx]; entry.returned=old.returned; LEIHEN[idx]=entry; }
+  } else {
+    LEIHEN.push(entry);
+  }
+  syncStatus();
+  saveLeihenLocal();
+  saveLeiheToSheet(entry);
+  closeLeiheModal();
+  showToast('Leihe gespeichert');
+  renderLeiheTab(currentLeiheTab);
+  renderStat();
+}
+
+function deleteLeihe() {
+  const id = document.getElementById('lm-id').value;
+  if(!id) return;
+  if(!confirm('Leihe wirklich löschen?')) return;
+  LEIHEN = LEIHEN.filter(l=>l.id!==id);
+  saveLeihenLocal();
+  closeLeiheModal();
+  showToast('Leihe gelöscht');
+  renderLeiheTab(currentLeiheTab);
+  renderStat();
+}
+
+// ══════════════════════════════════════════════════════════════
+// MODALS – RÜCKGABE
+// ══════════════════════════════════════════════════════════════
+function openRueckModal(id) {
+  const l = LEIHEN.find(x=>x.id===id);
+  if(!l) return;
+  document.getElementById('rm-id').value = id;
+  document.getElementById('rm-text').textContent = l.name+' – '+l.invBrand+' '+l.invName+' zurückgegeben?';
+  document.getElementById('rm-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('rueck-modal').classList.add('show');
+}
+function closeRueckModal() { document.getElementById('rueck-modal').classList.remove('show'); }
+function confirmRueck() {
+  const id = document.getElementById('rm-id').value;
+  const date = document.getElementById('rm-date').value;
+  const l = LEIHEN.find(x=>x.id===id);
+  if(!l) return;
+  l.returned = date;
+  l.status = 'returned';
+  saveLeihenLocal();
+  saveLeiheToSheet(l);
+  closeRueckModal();
+  showToast('Rückgabe bestätigt ✓');
+  renderLeiheTab(currentLeiheTab);
+  renderStat();
+}
+
+// ══════════════════════════════════════════════════════════════
+// MODALS – INVENTAR
+// ══════════════════════════════════════════════════════════════
+function openInvModal(id) {
+  if(id) {
+    const inv = INVENTAR.find(i=>i.id===id);
+    if(!inv) return;
+    document.getElementById('inv-modal-title').textContent='Gerät bearbeiten';
+    document.getElementById('im-id').value = id;
+    document.getElementById('im-name').value = inv.name;
+    document.getElementById('im-brand').value = inv.brand;
+    document.getElementById('im-serial').value = inv.serial||'';
+    document.getElementById('im-note').value = inv.note||'';
+    document.getElementById('im-delete-btn').style.display='inline-flex';
+  } else {
+    document.getElementById('inv-modal-title').textContent='Neues Gerät';
+    document.getElementById('im-id').value='';
+    document.getElementById('im-name').value='';
+    document.getElementById('im-brand').value='';
+    document.getElementById('im-serial').value='';
+    document.getElementById('im-note').value='';
+    document.getElementById('im-delete-btn').style.display='none';
+  }
+  document.getElementById('inv-modal').classList.add('show');
+}
+function closeInvModal() { document.getElementById('inv-modal').classList.remove('show'); }
+function saveInv() {
+  const name = document.getElementById('im-name').value.trim();
+  const brand = document.getElementById('im-brand').value.trim();
+  if(!name){showToast('Bitte Gerätename eingeben',true);return;}
+  const id = document.getElementById('im-id').value;
+  const entry = {
+    id: id || uid(),
+    name, brand,
+    serial: document.getElementById('im-serial').value.trim(),
+    note: document.getElementById('im-note').value.trim()
+  };
+  if(id) { const idx=INVENTAR.findIndex(i=>i.id===id); if(idx>=0) INVENTAR[idx]=entry; }
+  else { INVENTAR.push(entry); }
+  saveInvLocal();
+  saveInvToSheet(entry);
+  closeInvModal();
+  showToast('Gerät gespeichert');
+  if(currentLeiheTab==='inventar') renderInventar();
+}
+function deleteInv() {
+  const id = document.getElementById('im-id').value;
+  if(!id) return;
+  const busy = LEIHEN.some(l=>l.invId===id && !l.returned);
+  if(busy){showToast('Gerät ist aktuell verliehen – zuerst zurückgeben',true);return;}
+  if(!confirm('Gerät aus Inventar entfernen?')) return;
+  INVENTAR = INVENTAR.filter(i=>i.id!==id);
+  saveInvLocal();
+  closeInvModal();
+  showToast('Gerät gelöscht');
+  if(currentLeiheTab==='inventar') renderInventar();
+}
+
+// ══════════════════════════════════════════════════════════════
+// IEM EINGABE
+// ══════════════════════════════════════════════════════════════
+function openNLFromSearch(idx){
+  showPage('eingabe',document.querySelectorAll('.nav-btn')[2]);
+  const r=DATA[idx];showNLPanel(r.Name,'','',r.Marke);
+}
+function toggleCat(lbl,id){
+  const cb=document.getElementById(id);cb.checked=!cb.checked;
+  lbl.classList.toggle('on',cb.checked);
+}
+function autoSupplier(){
+  const t=document.getElementById('e-typ').value.trim();
+  const s=getSupplierFromTyp(t);
+  const sel=document.getElementById('e-lieferant');
+  const hint=document.getElementById('e-lief-hint');
+  if(s){sel.value=s;hint.textContent='✓ Automatisch erkannt';}else{hint.textContent='';}
+}
+function saveEntry(){
+  const name=document.getElementById('e-name').value.trim();
+  if(!name){showToast('Bitte Name eingeben',true);return;}
+  const lieferant=document.getElementById('e-lieferant').value;
+  if(!lieferant){showToast('Bitte Lieferant wählen',true);return;}
+  const entry={
+    Monat:+document.getElementById('e-monat').value,
+    Datum:document.getElementById('e-datum').value,
+    Name:name,Typ:document.getElementById('e-typ').value.trim(),Marke:lieferant,
+    email:document.getElementById('e-email').value.trim(),
+    tel:document.getElementById('e-tel').value.trim(),
+    'Univeral':document.getElementById('e-univeral').checked?1:0,
+    'Custom':document.getElementById('e-custom').checked?1:0,
+    'GHS':document.getElementById('e-ghs').checked?1:0,
+    'Mulde':document.getElementById('e-mulde').checked?1:0,
+    'Rep/Serv.':document.getElementById('e-repserv').checked?1:0,
+    'Funk':document.getElementById('e-funk').checked?1:0,
+    'Ambi':document.getElementById('e-ambi').checked?1:0,
+    'MusikLover':document.getElementById('e-musiklover').checked?1:0,
+    'WVK':document.getElementById('e-wvk').checked?1:0,
+    'Ersatz':document.getElementById('e-ersatz').checked?1:0,
+  };
+  DATA.push(entry);
+  saveToSheet(entry);
+  ['e-name','e-typ','e-email','e-tel'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('e-lieferant').value='';
+  document.getElementById('e-lief-hint').textContent='';
+  ['univeral','custom','ghs','mulde','repserv','funk','ambi','musiklover','wvk','ersatz'].forEach(k=>{
+    const cb=document.getElementById('e-'+k);
+    if(cb){cb.checked=false;document.getElementById('lbl-'+k).classList.remove('on');}
+  });
+  showToast('Gespeichert!');
+  const note=document.getElementById('save-note');
+  note.classList.add('show');setTimeout(()=>note.classList.remove('show'),2500);
+  showNLPanel(entry.Name,entry.email,entry.tel,entry.Marke);
+}
+function showNLPanel(name,email,tel,marke){
+  const parts=(name||'').trim().split(/\s+/);
+  const nachname=parts[0]||'';const vorname=parts.slice(1).join(' ')||nachname;
+  document.getElementById('nl-vorname-v').textContent=vorname||'—';
+  document.getElementById('nl-nachname-v').textContent=nachname||'—';
+  document.getElementById('nl-email-v').textContent=email||'—';
+  document.getElementById('nl-tel-v').textContent=tel||'—';
+  document.getElementById('nl-vorname').dataset.val=vorname;
+  document.getElementById('nl-nachname').dataset.val=nachname;
+  document.getElementById('nl-email').dataset.val=email||'';
+  document.getElementById('nl-tel').dataset.val=tel||'';
+  document.getElementById('nl-warn').style.display=(!email||!tel)?'block':'none';
+  document.getElementById('nl-panel').classList.add('show');
+}
+function copyNL(id){
+  const el=document.getElementById(id);const val=el.dataset.val||'';
+  if(!val||val==='—')return;
+  navigator.clipboard.writeText(val).then(()=>{
+    el.classList.add('cp');const v=document.getElementById(id+'-v');
+    const orig=v.textContent;v.textContent='✓ Kopiert';
+    setTimeout(()=>{v.textContent=orig;el.classList.remove('cp');},1800);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════════
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='statistik')renderStat();
+  if(id==='suche')renderSearch();
+  if(id==='leihe'){syncStatus();renderLeiheTab(currentLeiheTab);}
+}
+function showToast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(err?' err':'');
+  setTimeout(()=>t.className='toast',3200);
+}
+
+// Close modals on overlay click
+document.getElementById('leihe-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeLeiheModal();});
+document.getElementById('inv-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeInvModal();});
+document.getElementById('rueck-modal').addEventListener('click', e=>{if(e.target===e.currentTarget)closeRueckModal();});
+
+// ══════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  const now = new Date();
+  document.getElementById('e-datum').value = now.toISOString().split('T')[0];
+  document.getElementById('e-monat').value = now.getMonth() + 1;
+  syncStatus();
+  renderStat();
+  renderSearch();
+  loadSheetData();
+});
+</script>
+</body>
+</html>
